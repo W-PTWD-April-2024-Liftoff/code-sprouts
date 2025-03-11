@@ -1,4 +1,4 @@
-package org.example.models.data;
+package org.example.models;
 
 public class AbstractEntity {
 }
