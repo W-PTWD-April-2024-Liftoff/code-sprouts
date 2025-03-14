@@ -10,10 +10,8 @@ public class Book extends AbstractEntity {
     @NotBlank
     private String bookName;
 
-    @ManyToOne
     private String author;
 
-    @ManyToOne
     private String category;
 
     public String getBookName() {
