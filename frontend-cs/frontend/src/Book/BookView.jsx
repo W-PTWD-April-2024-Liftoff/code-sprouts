@@ -39,9 +39,12 @@ return (
               <td colSpan={3}>{book.bookName}</td>
               <td>{book.category}</td>
               <td>{book.author}</td>
-           <td>View </td>
-           <td>Update</td>
-           <td>Delete</td></tr>
+             <td className="mx-2">
+              <button className="btn btn-primary mt-2">View </button>
+              <button className="btn btn-success mt-2">Update </button>
+              <button className="btn btn-danger mt-2">Delete </button>
+             </td>
+             </tr>
           ))}
         </tbody>
       </table>
