@@ -5,6 +5,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "../node_modules/bootstrap/dist/js/bootstrap.min.js"
 import NavBar  from './component/NavBar.jsx';"./component/NavBar.jsx"
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
+import AddBook from './Book/AddBook.jsx';
 function App() {
  return (
     <>
@@ -13,6 +14,7 @@ function App() {
   <NavBar/>
   <Routes>
      <Route exact path="/book" element={<BookView/>}></Route>
+     <Route exact path="/book/add" element={<AddBook/>}></Route>
              </Routes>
             </Router>
       </div>

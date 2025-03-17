@@ -19,36 +19,38 @@ function BookView () {
   };
 
 return (
-    <section>
-      <table className="table table-bordered table-hover ">
-        <thead>
-          <tr className="text-center">
-            <th>Id</th>
-           <th scope="col" colSpan={3}>Name</th>
-             <th scope="col">Category</th>
-             <th scope="col">Author</th>
-            <th scope="col" colSpan={6}>Actions</th>
+  <section>
+  <div className="table-responsive">
+    <table className="table table-bordered table-hover">
+      <thead>
+        <tr className="text-center">
+          <th>Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">Author</th>
+          <th scope="col" colSpan={3}>Actions</th>
+        </tr>
+      </thead>
+      <tbody className="text-center">
+        {books.map((book, index) => (
+          <tr key={book.id}>
+            <th scope="row">{index + 1}</th>
+            <td>{book.bookName}</td>
+            <td>{book.category}</td>
+            <td>{book.author}</td>
+            <td className="d-flex justify-content-center">
+              <button className="btn btn-primary mx-1 mt-2">View</button>
+              <button className="btn btn-success mx-1 mt-2">Update</button>
+              <button className="btn btn-danger mx-1 mt-2">Delete</button>
+            </td>
           </tr>
-        </thead>
-        <tbody className="text-center">
-          {books.map((book, index) => (
-            <tr key={book.id}>
-              <th scope="row" key={index}>
-                {index + 1}
-              </th>
-              <td colSpan={3}>{book.bookName}</td>
-              <td>{book.category}</td>
-              <td>{book.author}</td>
-             <td className="mx-2">
-              <button className="btn btn-primary mt-2">View </button>
-              <button className="btn btn-success mt-2">Update </button>
-              <button className="btn btn-danger mt-2">Delete </button>
-             </td>
-             </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+         
+      
   );
 }
 
