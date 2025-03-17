@@ -17,6 +17,13 @@ function BookView () {
       console.error("Failed to fetch books:", response.status);
     }
   };
+  const handleDelete =async(id) =>{
+    await axios.delete(`http://localhost:8080/book/delete/${id}`);
+  
+  loadBooks();
+  }
+ 
+
 
 return (
   <section>
@@ -41,8 +48,8 @@ return (
             <td className="d-flex justify-content-center">
               <button className="btn btn-primary mx-1 mt-2">View</button>
               <button className="btn btn-success mx-1 mt-2">Update</button>
-              <button className="btn btn-danger mx-1 mt-2">Delete</button>
-            </td>
+              <button className="btn btn-danger mt-2" onClick={() => handleDelete(book.id)}>Delete</button>
+               </td>
           </tr>
         ))}
       </tbody>

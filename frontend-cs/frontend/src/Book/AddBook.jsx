@@ -17,8 +17,8 @@ const AddBook = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:8080/book/add", book);
-      console.log( book);
-      setBook({ bookName: '', category: '', author: '' }); 
+    //  console.log( book);
+    //  setBook({ bookName: '', category: '', author: '' }); 
       navigate("/book");
     } catch (error) {
       console.error("Error saving the book:", error.response ? error.response.data : error.message);
@@ -27,7 +27,8 @@ const AddBook = () => {
   };
 
   return (
-    <div className='col-sm-8 py-2 px-5'>
+<div className='col-sm-8 py-2 px-5'>
+   
       <h3>Add Book</h3>
       <form onSubmit={saveBook}>
         <div className='input-group mb-5'>

@@ -8,8 +8,7 @@ import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
 import AddBook from './Book/AddBook.jsx';
 function App() {
  return (
-    <>
-      <div className='App'>
+           <main className="container mt-5">
    <Router>
   <NavBar/>
   <Routes>
@@ -17,9 +16,9 @@ function App() {
      <Route exact path="/book/add" element={<AddBook/>}></Route>
              </Routes>
             </Router>
-      </div>
+      </main>
     
-    </>
+  
   )
 }
 export default App
