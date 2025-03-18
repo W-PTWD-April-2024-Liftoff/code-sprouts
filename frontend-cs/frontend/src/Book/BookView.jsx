@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { Link } from "react-router";
 
 function BookView () {
   const [books,setBooks] =useState([]);
@@ -46,7 +46,9 @@ return (
             <td>{book.category}</td>
             <td>{book.author}</td>
             <td className="d-flex justify-content-center">
-              <button className="btn btn-primary mx-1 mt-2">View</button>
+            <td>
+              <Link to={`/book/viewById/${book.id}`} className="btn btn-primary mt-2" >View</Link>
+              </td>
               <button className="btn btn-success mx-1 mt-2">Update</button>
               <button className="btn btn-danger mt-2" onClick={() => handleDelete(book.id)}>Delete</button>
                </td>
