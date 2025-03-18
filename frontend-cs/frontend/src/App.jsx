@@ -7,6 +7,7 @@ import NavBar  from './component/NavBar.jsx';"./component/NavBar.jsx"
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
 import AddBook from './Book/AddBook.jsx';
 import BookDetails from './Book/BookDetails.jsx';
+import UpdateBook from './Book/UpdateBook.jsx';
 function App() {
  return (
            <main className="container mt-5">
@@ -16,6 +17,9 @@ function App() {
      <Route exact path="/book" element={<BookView/>}></Route>
      <Route exact path="/book/add" element={<AddBook/>}></Route>
      <Route exact path="/book/viewById/:id" element={<BookDetails/>}></Route>
+     <Route exact path="/book/update/:id" element={<UpdateBook/>}></Route>
+
+
              </Routes>
             </Router>
       </main>

@@ -49,7 +49,9 @@ return (
             <td>
               <Link to={`/book/viewById/${book.id}`} className="btn btn-primary mt-2" >View</Link>
               </td>
-              <button className="btn btn-success mx-1 mt-2">Update</button>
+              <td>
+            <Link to ={`/book/update/${book.id}`}className="btn btn-success mt-2" > Update</Link>
+            </td>
               <button className="btn btn-danger mt-2" onClick={() => handleDelete(book.id)}>Delete</button>
                </td>
           </tr>
