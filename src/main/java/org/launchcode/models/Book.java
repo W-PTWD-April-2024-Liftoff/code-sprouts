@@ -1,8 +1,12 @@
 package org.launchcode.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Book extends AbstractEntity {
@@ -15,11 +19,10 @@ public class Book extends AbstractEntity {
 
     private String category;
 
-    private int rating;
+    @OneToMany
+    private List<BookDetails> bookDetails = new ArrayList<>();
 
-    @NotBlank(message = "Description is required.")
-    @Size(max = 1000, message = "Description can be no more than 1000 characters,")
-    private String description;
+    public Book() {};
 
     public String getBookName() {
         return bookName;
@@ -43,21 +46,5 @@ public class Book extends AbstractEntity {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
