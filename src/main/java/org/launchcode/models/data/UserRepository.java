@@ -1,6 +1,7 @@
-package org.example.models.data;
+package org.launchcode.models.data;
 
-import org.example.models.User;
+
+import org.launchcode.models.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<User, Integer> {
 
     //custom query method find user in database
-    User getByUsername(String username);
+    User findByUsername(String username);
 }

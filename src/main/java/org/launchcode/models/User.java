@@ -1,10 +1,9 @@
-package org.example.models;
-
+package org.launchcode.models;
 import jakarta.persistence.Entity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
-public class User extends AbstractEntity{
+public class User extends AbstractEntity {
 
     private String username;
 
@@ -15,6 +14,7 @@ public class User extends AbstractEntity{
         this.pwHash = encoder.encode(password);
     }
 
+    public String getUsername() { return username; }
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public boolean isMatchingPassword(String password) {
