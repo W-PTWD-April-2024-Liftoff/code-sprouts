@@ -16,16 +16,19 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @PostMapping("/books/add")
-    public Book addBook(@RequestBody Book book) {
-        return bookRepository.save(book);
-    }
-    @GetMapping("/books")
+
+    @GetMapping("/book")
     public List<Book> getBooks() {
         return (List<Book>) bookRepository.findAll();
     }
 
-    @GetMapping("/books/viewbyid/{id}")
+    @PostMapping("/book/add")
+    public Book addBook(@RequestBody Book book) {
+        return bookRepository.save(book);
+    }
+
+
+    @GetMapping("/boo/viewById/{id}")
     public Book viewBookById(@PathVariable int id) {
         Optional<Book> optBook = bookRepository.findById(id);
         if (optBook.isPresent()) {
@@ -36,19 +39,20 @@ public class BookController {
         }
     }
 
-    @PutMapping("/books/update/{id}")
-    public Book updatedBook(@PathVariable int id, @RequestBody Book booktochange) {
+    @PutMapping("/book/update/{id}")
+    public Book updatedBook(@PathVariable int id, @RequestBody Book newBook) {
         Optional<Book> oldbook = bookRepository.findById(id);
         if (oldbook.isPresent()) {
-            booktochange.setBookName(booktochange.getBookName());
-            booktochange.setCategory(booktochange.getCategory());
-            booktochange.setAuthor(booktochange.getAuthor());
-            return bookRepository.save(booktochange);
+            Book bookToUpdate = oldbook.get();
+            bookToUpdate.setBookName(newBook.getBookName());
+            bookToUpdate.setCategory(newBook.getCategory());
+            bookToUpdate.setAuthor(newBook.getAuthor());
+            return bookRepository.save(bookToUpdate);
         } else {
             return null;
         }
     }
-    @DeleteMapping("/books/delete/{bookidtodelete}")
+    @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {
         Optional<Book> booktobedeleted = bookRepository.findById(bookidtodelete);
         if (booktobedeleted.isPresent()) {

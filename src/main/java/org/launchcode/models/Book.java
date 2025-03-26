@@ -1,19 +1,14 @@
 package org.launchcode.models;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
+
 
 @Entity
 public class Book extends AbstractEntity {
 
-    @NotBlank
     private String bookName;
 
-    @ManyToOne
     private String author;
 
-    @ManyToOne
     private String category;
 
     public String getBookName() {
