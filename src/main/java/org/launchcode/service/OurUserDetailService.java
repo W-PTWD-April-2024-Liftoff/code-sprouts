@@ -1,6 +1,5 @@
 package org.launchcode.service;
 
-import org.launchcode.models.data.UserRepository;
 import org.launchcode.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

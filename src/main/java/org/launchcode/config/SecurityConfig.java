@@ -2,13 +2,14 @@ package org.launchcode.config;
 
 
 import com.mysql.cj.protocol.AuthenticationPlugin;
-import com.mysql.cj.protocol.AuthenticationProvider;
+//import com.mysql.cj.protocol.AuthenticationProvider;
 import org.launchcode.service.JWTUtils;
 import org.launchcode.service.OurUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,29 +32,35 @@ public class SecurityConfig {
     private JWTAuthFilter jwtAuthFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)  throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**", "/public/**").permitAll()
-                    .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                    .requestMatchers("/user/**").hasAnyAuthority("USER")
-                    .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
-                    .anyRequest().authenticated())
-        .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
-                        jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
-                );
-        return httpSecurity.build();
-    }
+    SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(ourUserDetailService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider;
+        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
+        return http.build();
     }
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)  throws Exception {
+//        httpSecurity.csrf(AbstractHttpConfigurer::disable)
+//                .cors(Customizer.withDefaults())
+//                .authorizeHttpRequests(request-> request.requestMatchers("/auth/**", "/public/**").permitAll()
+//                    .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+//                    .requestMatchers("/user/**").hasAnyAuthority("USER")
+//                    .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
+//                    .anyRequest().authenticated())
+//        .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider()).addFilterBefore(
+//                        jwtAuthFilter, UsernamePasswordAuthenticationFilter.class
+//                );
+//        return httpSecurity.build();
+//    }
+
+////    @Bean
+////    public AuthenticationProvider authenticationProvider(){
+////        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+////        daoAuthenticationProvider.setUserDetailsService(ourUserDetailService);
+////        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+////        return daoAuthenticationProvider;
+////
+//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -65,5 +72,8 @@ public class SecurityConfig {
     }
 
 }
+
+
+//All access
 
 

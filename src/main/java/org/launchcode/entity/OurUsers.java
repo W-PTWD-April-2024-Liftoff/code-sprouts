@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name ="ourusers")
+@Table(name = "ourusers")
 @Data
 public class OurUsers implements UserDetails {
 
@@ -27,6 +27,11 @@ public class OurUsers implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
+
+//    @Override
+//    public String getPassword() {
+//        return password;
+//    }
 
     @Override
     public String getUsername() {

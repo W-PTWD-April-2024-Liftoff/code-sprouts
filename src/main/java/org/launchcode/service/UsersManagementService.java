@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -39,9 +38,9 @@ public class UsersManagementService {
             ourUser.setRole(registrationRequest.getRole());
             ourUser.setName(registrationRequest.getName());
             ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-            OurUsers ourUserResult = usersRepo.save(ourUser);
-            if (ourUserResult.getId()>0) {
-                resp.setOurUsers((ourUserResult));
+            OurUsers ourUsersResult = usersRepo.save(ourUser);
+            if (ourUsersResult.getId()>0) {
+                resp.setOurUsers((ourUsersResult));
                 resp.setMessage("User Saved Successfully");
                 resp.setStatusCode(200);
             }
@@ -95,7 +94,7 @@ public class UsersManagementService {
                 response.setMessage("Successfully Refreshed Token");
             }
             response.setStatusCode(200);
-            return respone;
+            return response;
 
         }catch (Exception e) {
             response.setStatusCode(500);
@@ -128,9 +127,9 @@ public class UsersManagementService {
      public ReqRes getUsersById(Integer id) {
         ReqRes reqRes = new ReqRes();
         try {
-            OurUsers usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User Not fount"));
-            reqRes.setOurUsers(userById);
-            reqRes.setStatuscode(200);
+            OurUsers usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+            reqRes.setOurUsers(usersById);
+            reqRes.setStatusCode(200);
             reqRes.setMessage("Users with id '" + id + "' found successfully");
         } catch (Exception e) {
             reqRes.setStatusCode(500);
@@ -161,11 +160,11 @@ public class UsersManagementService {
     public ReqRes updateUser(Integer userId, OurUsers updatedUser) {
         ReqRes reqRes = new ReqRes();
         try {
-            Optional<OurUsers> usersOptional = usersRepo.findById(userId);
-            if (usersOptional.isPresent()) {
+            Optional<OurUsers> userOptional = usersRepo.findById(userId);
+            if (userOptional.isPresent()) {
                 OurUsers existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
-                existingUser.setName(updatedUser.getNamel());
+                existingUser.setName(updatedUser.getName());
                 existingUser.setCity(updatedUser.getCity());
                 existingUser.setRole(updatedUser.getRole());
 

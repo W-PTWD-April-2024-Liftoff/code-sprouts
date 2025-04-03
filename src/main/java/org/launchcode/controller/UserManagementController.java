@@ -22,13 +22,13 @@ public class UserManagementController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ReqRes> login(@RequestBody ReqRes reg) {
-        return ResponseEntity.ok(usersManagementService.login(reg));
+    public ResponseEntity<ReqRes> login(@RequestBody ReqRes req) {
+        return ResponseEntity.ok(usersManagementService.login(req));
     }
 
     @PostMapping("/auth/refresh")
-    public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes reg) {
-        return ResponseEntity.ok(usersManagementService.refreshToken(reg));
+    public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes req) {
+        return ResponseEntity.ok(usersManagementService.refreshToken(req));
     }
 
     @GetMapping("/admin/get-all-users")
@@ -47,7 +47,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/adminuser/get-profile")
-    public ResponseEntity<ReqRes> getProfile(){
+    public ResponseEntity<ReqRes> getMyProfile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         ReqRes response = usersManagementService.getMyInfo(email);
