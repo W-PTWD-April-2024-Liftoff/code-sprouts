@@ -47,6 +47,8 @@ public class BookController {
             bookToUpdate.setBookName(newBook.getBookName());
             bookToUpdate.setCategory(newBook.getCategory());
             bookToUpdate.setAuthor(newBook.getAuthor());
+            bookToUpdate.setDescription(newBook.getDescription());
+            bookToUpdate.setRating(newBook.getRating());
             return bookRepository.save(bookToUpdate);
         } else {
             return null;
