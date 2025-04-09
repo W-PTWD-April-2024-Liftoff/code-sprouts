@@ -30,7 +30,7 @@ public class GoogleBooksResponse {
         private List<String> authors;
         private String description;
         private String category;
-        private String source;
+
 
         public String getGenre() {
             return genre;
@@ -41,16 +41,6 @@ public class GoogleBooksResponse {
         }
 
         private String genre;
-
-
-        public String getSource() {
-            return source;
-        }
-
-        public void setSource(String source) {
-            this.source = source;
-        }
-
         public String getCategory() {
             return category;
         }
