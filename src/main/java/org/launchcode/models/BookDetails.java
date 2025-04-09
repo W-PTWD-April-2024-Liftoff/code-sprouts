@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 public class BookDetails extends AbstractEntity {
 
+    @NotBlank(message = "Rating is required, please enter a number 1 - 5")
     private int rating;
 
     @NotBlank(message = "Description is required.")
