@@ -5,8 +5,8 @@ import axios from "axios";
 
 const UpdateBook = () => {
 
-     const [book, setBook] = useState({bookName:'',category:'',author:''});
-     const {bookName,category,author} = book;
+     const [book, setBook] = useState({bookName:'',category:'',author:'', description: '', rating: ''});
+     const {bookName,category,author,description,rating} = book;
      const navigate = useNavigate();
      const {id} = useParams();
      const handleInputChange =(e) =>{
@@ -81,6 +81,36 @@ return(
   >
 </input>
                     </div>
+
+                    <div className='input-group mb-5'>
+<label className='input-group-text' htmlFor='description'>
+    Description
+</label>
+<input className='form-control-sm-6'
+ type='text' name='description' 
+ id='description' required
+  value={description}
+  onChange = { handleInputChange}
+  >
+</input>
+                 </div>
+
+                 <div className='input-group mb-5'>
+<label className='input-group-text' htmlFor='rating'>
+  Rating
+</label>
+<input
+ className='form-control-sm-6' 
+ type='text' 
+ name='rating'
+  id='rating' 
+  required 
+  value={rating}
+  onChange = {(e) => handleInputChange(e)}
+  >
+</input>
+                    </div>
+
                     <div className="row">
     <div className="col-sm-2">
         <button  type="submit" className='btn btn-outline-success btn-lg'>

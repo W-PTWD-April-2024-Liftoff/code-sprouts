@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AddBook = () => {
-  const [book, setBook] = useState({ bookName: '', category: '', author: '' });
-  const { bookName, category, author } = book;
+  const [book, setBook] = useState({ bookName: '', category: '', author: '', description: '', rating: '' });
+  const { bookName, category, author, description, rating } = book;
   const navigate = useNavigate();
 
   // Handle input changes for each field
@@ -72,6 +72,36 @@ const AddBook = () => {
             id='author'
             required
             value={author} 
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className='input-group mb-5'>
+          <label className='input-group-text' htmlFor='description'>
+            Description
+          </label>
+          <input
+            className='form-control-sm-6'
+            type='text'
+            name='description'
+            id='description'
+            required
+            value={description} 
+            onChange={handleInputChange} 
+          />
+        </div>
+
+        <div className='input-group mb-5'>
+          <label className='input-group-text' htmlFor='rating'>
+            Rating
+          </label>
+          <input
+            className='form-control-sm-6'
+            type='text'
+            name='rating'
+            id='rating'
+            required
+            value={rating} 
             onChange={handleInputChange}
           />
         </div>

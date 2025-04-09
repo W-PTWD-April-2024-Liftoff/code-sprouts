@@ -35,6 +35,8 @@ return (
           <th scope="col">Name</th>
           <th scope="col">Category</th>
           <th scope="col">Author</th>
+          <th scope="col">Description</th>
+          <th scope="col">Rating</th>
           <th scope="col" colSpan={3}>Actions</th>
         </tr>
       </thead>
@@ -45,6 +47,8 @@ return (
             <td>{book.bookName}</td>
             <td>{book.category}</td>
             <td>{book.author}</td>
+            <td>{book.description}</td>
+            <td>{book.rating}</td>
             <td className="d-flex justify-content-center">
             <td>
               <Link to={`/book/viewById/${book.id}`} className="btn btn-primary mt-2" >View</Link>
