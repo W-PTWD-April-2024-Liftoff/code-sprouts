@@ -60,8 +60,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(request-> request.requestMatchers("/auth/**", "/public/**").permitAll()
                     .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-//                   .requestMatchers("/user/**").hasAnyAuthority("USER")
-//                    .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
+                  .requestMatchers("/user/**").hasAnyAuthority("USER")
+                  .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
                     .anyRequest().authenticated())
             .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider()).addFilterBefore(
