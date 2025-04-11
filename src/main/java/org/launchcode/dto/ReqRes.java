@@ -26,4 +26,7 @@ public class ReqRes {
     private OurUsers ourUsers;
     private List<OurUsers> ourUsersList;
 
+    public int getStatusCode() {
+        return statusCode;
+    }
 }

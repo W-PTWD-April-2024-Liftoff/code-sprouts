@@ -54,7 +54,7 @@ public class JWTUtils {
     public <T> T extractClaims(String token, Function<Claims, T> claimFunction) {
         Claims claims = Jwts.parser()
                 .setSigningKey(Key)
-                .build()
+                //.build()
                 .parseClaimsJws(token)
                 .getBody();
         return claimFunction.apply(claims);
