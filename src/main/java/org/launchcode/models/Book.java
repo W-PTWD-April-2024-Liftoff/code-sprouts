@@ -7,6 +7,7 @@ public class Book extends AbstractEntity {
 
     private String bookName;
 
+    private String source;
     private String author;
 
     private String category;
@@ -29,6 +30,14 @@ public class Book extends AbstractEntity {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public void setCategory(String category) {
