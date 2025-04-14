@@ -3,11 +3,12 @@ import Home from './Home'
 import BookView from './Book/BookView';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "../node_modules/bootstrap/dist/js/bootstrap.min.js"
-import NavBar  from './component/NavBar.jsx';"./component/NavBar.jsx"
+import NavBar  from './component/NavBar.jsx';
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
 import AddBook from './Book/AddBook.jsx';
 import BookDetails from './Book/BookDetails.jsx';
 import UpdateBook from './Book/UpdateBook.jsx';
+import SearchBook from './Book/SearchBook.jsx';
 function App() {
  return (
            <main className="container mt-5">
@@ -18,9 +19,8 @@ function App() {
      <Route exact path="/book/add" element={<AddBook/>}></Route>
      <Route exact path="/book/viewById/:id" element={<BookDetails/>}></Route>
      <Route exact path="/book/update/:id" element={<UpdateBook/>}></Route>
-
-
-             </Routes>
+     <Route exact path="/book/search/:query" element={ <SearchBook/> }></Route>
+     </Routes>
             </Router>
       </main>
     
