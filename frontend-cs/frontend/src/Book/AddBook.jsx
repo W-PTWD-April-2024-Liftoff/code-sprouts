@@ -16,7 +16,14 @@ const AddBook = () => {
   const saveBook = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/book/add", book);
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:8080/book/add",
+        book,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       //  console.log( book);
       //setBook({ bookName: "", category: "", author: "" });
       navigate("/book");

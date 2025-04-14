@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom"; 
+import { Link, useParams } from "react-router-dom";
 
 function BookDetails() {
-  const { id } = useParams(); 
-  const [book, setBook] = useState(null); 
+  const { id } = useParams();
+  const [book, setBook] = useState(null);
 
   useEffect(() => {
-    loadBook(); 
-  }, [id]); 
+    loadBook();
+  }, [id]);
 
   const loadBook = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/book/viewById/${id}`);
-      setBook(response.data); 
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:8080/book/viewById/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setBook(response.data);
     } catch (error) {
       console.error("Error fetching book:", error);
     }
   };
 
   if (!book) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -51,7 +57,6 @@ function BookDetails() {
             <Link className="btn btn-primary my-2" to="/book">
               Back to Bookshelf
             </Link>
-            
           </div>
         </div>
       </div>

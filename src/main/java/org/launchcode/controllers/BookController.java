@@ -1,9 +1,12 @@
 package org.launchcode.controllers;
 
+import org.launchcode.entity.OurUsers;
 import org.launchcode.models.Book;
 import org.launchcode.models.GoogleBooksResponse;
+import org.launchcode.repository.UsersRepo;
 import org.launchcode.services.GoogleBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.models.data.BookRepository;
 import org.launchcode.models.BookData;
@@ -23,16 +26,45 @@ public class BookController {
     @Autowired
     private GoogleBookService googleBookService;
 
+    @Autowired
+    private UsersRepo ourUsersRepository;
+
     @GetMapping("/book")
     public List<Book> getBooks() {
         return (List<Book>) bookRepository.findAll();
     }
+//
+//    @PostMapping("/book/add")
+//    public Book addBook(@RequestBody Book book) {
+//        return bookRepository.save(book);
+//    }
 
     @PostMapping("/book/add")
     public Book addBook(@RequestBody Book book) {
-        return bookRepository.save(book);
-    }
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        Book savedBook = bookRepository.save(book);
 
+        if (user.getBookList() == null) {
+            user.setBookList(new ArrayList<>());
+        }
+        if (!user.getBookList().contains(savedBook)) {
+            user.getBookList().add(savedBook);
+        }
+
+        if (savedBook.getReaders() == null) {
+            savedBook.setReaders(new ArrayList<>());
+        }
+        if (!savedBook.getReaders().contains(user)) {
+            savedBook.getReaders().add(user);
+        }
+        ourUsersRepository.save(user);
+        return savedBook;
+    }
 
     @GetMapping("/book/viewById/{id}")
     public Book viewBookById(@PathVariable int id) {

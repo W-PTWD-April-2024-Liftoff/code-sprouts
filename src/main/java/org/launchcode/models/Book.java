@@ -1,7 +1,13 @@
 package org.launchcode.models;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import lombok.Data;
+import org.launchcode.entity.OurUsers;
+import java.util.List;
 
 
+
+@Data
 @Entity
 public class Book extends AbstractEntity {
 
@@ -10,6 +16,9 @@ public class Book extends AbstractEntity {
     private String author;
 
     private String category;
+
+    @ManyToMany(mappedBy = "bookList")
+    private List<OurUsers> readers;
 
     public String getSource() {
         return source;
@@ -44,4 +53,6 @@ public class Book extends AbstractEntity {
     public void setCategory(String category) {
         this.category = category;
     }
+
+
 }

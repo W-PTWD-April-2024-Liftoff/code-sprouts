@@ -2,6 +2,7 @@ package org.launchcode.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.launchcode.models.Book;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class OurUsers implements UserDetails {
     private String password;
     private String city;
     private String role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,4 +59,12 @@ public class OurUsers implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_books",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private List<Book> bookList;
 }
