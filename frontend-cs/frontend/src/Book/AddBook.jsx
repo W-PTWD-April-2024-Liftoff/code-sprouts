@@ -97,9 +97,10 @@ const AddBook = () => {
           </label>
           <input
             className='form-control-sm-6'
-            type='text'
+            type='integer'
             name='rating'
             id='rating'
+            placeholder = 'Please enter 1-5'
             required
             value={rating} 
             onChange={handleInputChange}

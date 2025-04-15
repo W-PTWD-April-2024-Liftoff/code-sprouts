@@ -17,7 +17,7 @@ const updateBook = async(e) =>{
      try{
       const response = await axios.put(`http://localhost:8080/book/update/${id}`, book);
       console.log(book);
-      setBook({ bookName: '', category: '',author:''});
+      setBook({ bookName: '', category: '',author:'', description: '', rating: ''});
     navigate("/book")
      }
      catch(error)
