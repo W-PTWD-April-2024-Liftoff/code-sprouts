@@ -95,13 +95,16 @@ public class BookController {
 //        }).toList();
 //    }
 
-//    @GetMapping("/book/filter")
-//    public List<Book> filterBooks(@RequestParam int rating, @RequestParam String category) {
-//        if() {
-//
-//        }
-//    }
-
+    @PutMapping("/book/search/AddFromApi")
+    private List<Book> addGoogleBooksFromApi (GoogleBooksResponse googleBooksResponse) {
+        return googleBooksReponse.getItems().stream.map(item -> {
+            Book addGoogleBook = new Book ();
+            addGoogleBook.setBookName(item.getVolumeInfo().getTitle());
+            addGoogleBook.setAuthor(item.getVolumeInfo().getAuthors());
+            addGoogleBook.setCategory(item.getVolumeInf().getDescription());
+            return bookRepository.save(addGoogleBook);
+        })
+    }
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {
