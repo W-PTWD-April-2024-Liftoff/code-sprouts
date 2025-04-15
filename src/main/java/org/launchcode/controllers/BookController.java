@@ -41,7 +41,7 @@ public class BookController {
             Book book = (Book) optBook.get();
             return book;
         } else {
-            return null;
+            throw new RuntimeException("Book is not available to view");
         }
     }
 
@@ -55,7 +55,7 @@ public class BookController {
             bookToUpdate.setAuthor(newBook.getAuthor());
             return bookRepository.save(bookToUpdate);
         } else {
-            return null;
+             throw new RuntimeException("Book is not Available to update");
         }
     }
 
@@ -100,7 +100,7 @@ public class BookController {
         if (booktobedeleted.isPresent()) {
             bookRepository.deleteById(bookidtodelete);
         }
-        return null;
+        throw new RuntimeException("Book is not Available to delete");
     }
 
  }
