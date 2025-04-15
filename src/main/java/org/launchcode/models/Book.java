@@ -21,6 +21,16 @@ public class Book extends AbstractEntity {
     @Size(max = 1000, message = "Description can be no more than 1000 characters.")
     private String description;
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    private String source;
+
     public int getRating() {
         return rating;
     }
