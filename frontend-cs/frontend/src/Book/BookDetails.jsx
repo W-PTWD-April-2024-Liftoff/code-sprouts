@@ -44,6 +44,13 @@ function BookDetails() {
                   <li className="list-group-item">
                     <b>Author:</b> {book.author}
                   </li>
+                  <li className="list-group-item">
+                    <b>Description:</b> {book.description}
+                  </li>
+
+                  <li className="list-group-item">
+                    <b>Rating:</b> {book.rating}
+                  </li>
                 </ul>
               </div>
             </div>
