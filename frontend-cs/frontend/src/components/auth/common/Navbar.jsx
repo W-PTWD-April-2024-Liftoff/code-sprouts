@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import UserService from "../../service/UserService";
+// import SearchResults from "../../../Book/SearchBook";
 
 function Navbar() {
   const isAuthenticated = UserService.isAuthenticated();
@@ -15,6 +16,38 @@ function Navbar() {
       UserService.logout();
     }
   };
+
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const navigate = useNavigate();
+  // const encodedSearchQuery = encodeURIComponent(searchQuery);
+
+  // const handleSearchChange = (e) => {
+  //   setSearchQuery(e.target.value);
+  // };
+
+  // const handleSearchSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (searchQuery.trim()) {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       const response = await axios.get(
+  //         `http://localhost:8080/book/search?bookName=${encodedSearchQuery}`,
+  //         {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //       );
+  //       if (response.data.length === 0) {
+  //         alert("No books found for your search.");
+  //       }
+  //       navigate(`/book/search/${searchQuery}`, {
+  //         state: { books: response.data },
+  //       });
+  //     } catch (error) {
+  //       navigate(`/book/search/${searchQuery}`, { state: { books: [] } });
+  //     }
+  //   }
+  // };
 
   return (
     <nav>
@@ -33,6 +66,23 @@ function Navbar() {
         {isAuthenticated && (
           <li>
             <Link to="/book/add">Add Books</Link>
+          </li>
+        )}
+        {isAuthenticated && (
+          <li>
+            {/* <form className="d-flex" onSubmit={handleSearchSubmit}>
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <button className="btn btn-outline-success" type="submit">
+                Search
+              </button>
+            </form> */}
           </li>
         )}
         {isAuthenticated && (

@@ -31,13 +31,15 @@ public class BookController {
 
     @GetMapping("/book")
     public List<Book> getBooks() {
-        return (List<Book>) bookRepository.findAll();
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        return (List<Book>) bookRepository.findBookByUserId(user.getId());
     }
 
-//    @PostMapping("/book/add")
-//    public Book addBook(@RequestBody Book book) {
-//        return bookRepository.save(book);
-//    }
 
     @PostMapping("/book/add")
     public Book addBook(@RequestBody Book book) {
@@ -47,23 +49,8 @@ public class BookController {
             throw new RuntimeException("Authenticated user not found");
         }
         OurUsers user = optionalUser.get();
-        Book savedBook = bookRepository.save(book);
-
-        if (user.getBookList() == null) {
-            user.setBookList(new ArrayList<>());
-        }
-        if (!user.getBookList().contains(savedBook)) {
-            user.getBookList().add(savedBook);
-        }
-
-        if (savedBook.getReaders() == null) {
-            savedBook.setReaders(new ArrayList<>());
-        }
-        if (!savedBook.getReaders().contains(user)) {
-            savedBook.getReaders().add(user);
-        }
-        ourUsersRepository.save(user);
-        return savedBook;
+        book.setUser(user);
+        return bookRepository.save(book);
     }
 
     @GetMapping("/book/viewById/{id}")
@@ -85,6 +72,9 @@ public class BookController {
             bookToUpdate.setBookName(newBook.getBookName());
             bookToUpdate.setCategory(newBook.getCategory());
             bookToUpdate.setAuthor(newBook.getAuthor());
+            bookToUpdate.setDescription(newBook.getDescription());
+            bookToUpdate.setRating(newBook.getRating());
+            bookToUpdate.setIsRead(newBook.getIsRead());
             return bookRepository.save(bookToUpdate);
         } else {
             return null;
@@ -105,7 +95,7 @@ public class BookController {
                 List<Book> apiBooks = convertGoogleBooksToLocalBooks(googleBookResponse);
                 apiBooks.forEach(book -> book.setSource("The book you search is not available in bookshelf,similar search from internet"));
                 System.out.println("Books from Google: " + apiBooks.size());
-                //  return convertGoogleBooksToLocalBooks(googleBookResponse);
+// return convertGoogleBooksToLocalBooks(googleBookResponse);
                 return apiBooks;
             } else {
                 System.out.println("No books found from Google for the query: " + bookName);
@@ -135,5 +125,4 @@ public class BookController {
         return null;
     }
 //
- }
-
+}

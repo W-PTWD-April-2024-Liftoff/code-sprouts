@@ -43,6 +43,9 @@ function BookView() {
               <th scope="col">Name</th>
               <th scope="col">Category</th>
               <th scope="col">Author</th>
+              <th scope="col">Description</th>
+              <th scope="col">Rating</th>
+              <th scope="col">Is Read?</th>
               <th scope="col" colSpan={3}>
                 Actions
               </th>
@@ -55,6 +58,9 @@ function BookView() {
                 <td>{book.bookName}</td>
                 <td>{book.category}</td>
                 <td>{book.author}</td>
+                <td>{book.description}</td>
+                <td>{book.rating}</td>
+                <td>{book.isRead}</td>
                 <td className="d-flex justify-content-center">
                   <td>
                     <Link

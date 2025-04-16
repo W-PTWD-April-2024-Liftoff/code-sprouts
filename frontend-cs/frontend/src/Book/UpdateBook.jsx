@@ -4,8 +4,15 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const UpdateBook = () => {
-  const [book, setBook] = useState({ bookName: "", category: "", author: "" });
-  const { bookName, category, author } = book;
+  const [book, setBook] = useState({
+    bookName: "",
+    category: "",
+    author: "",
+    description: "",
+    rating: "",
+    isRead: "",
+  });
+  const { bookName, category, author, description, rating, isRead } = book;
   const navigate = useNavigate();
   const { id } = useParams();
   const handleInputChange = (e) => {
@@ -23,7 +30,14 @@ const UpdateBook = () => {
         }
       );
       console.log(book);
-      setBook({ bookName: "", category: "", author: "" });
+      setBook({
+        bookName: "",
+        category: "",
+        author: "",
+        description: "",
+        rating: "",
+        isRead: "",
+      });
       navigate("/book");
     } catch (error) {
       console.error(
@@ -37,7 +51,10 @@ const UpdateBook = () => {
     loadBook();
   }, [id]);
   const loadBook = async () => {
-    const response = await axios.get(`http://localhost:8080/book/${id}`);
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`http://localhost:8080/book/${id}`, book, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setBook(response.data);
   };
 
@@ -86,6 +103,49 @@ const UpdateBook = () => {
             value={author}
             onChange={(e) => handleInputChange(e)}
           ></input>
+          <div className="input-group mb-5">
+            <label className="input-group-text" htmlFor="description">
+              Description
+            </label>
+            <input
+              className="form-control-sm-6"
+              type="text"
+              name="description"
+              id="description"
+              required
+              value={description}
+              onChange={handleInputChange}
+            ></input>
+          </div>
+
+          <div className="input-group mb-5">
+            <label className="input-group-text" htmlFor="rating">
+              Rating
+            </label>
+            <input
+              className="form-control-sm-6"
+              type="text"
+              name="rating"
+              id="rating"
+              required
+              value={rating}
+              onChange={(e) => handleInputChange(e)}
+            ></input>
+          </div>
+          <div className="input-group mb-5">
+            <label className="input-group-text" htmlFor="isRead">
+              Is Read?
+            </label>
+            <input
+              className="form-control-sm-6"
+              type="text"
+              name="isRead"
+              id="isRead"
+              required
+              value={isRead}
+              onChange={(e) => handleInputChange(e)}
+            ></input>
+          </div>
         </div>
         <div className="row">
           <div className="col-sm-2">

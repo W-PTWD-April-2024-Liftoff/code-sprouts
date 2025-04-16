@@ -1,13 +1,17 @@
 package org.launchcode.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import lombok.Data;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import org.launchcode.entity.OurUsers;
-import java.util.List;
 
-
-
-@Data
+@Getter
+@Setter
 @Entity
 public class Book extends AbstractEntity {
 
@@ -17,42 +21,31 @@ public class Book extends AbstractEntity {
 
     private String category;
 
-    @ManyToMany(mappedBy = "bookList")
-    private List<OurUsers> readers;
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
     private String source;
 
-    public String getBookName() {
-        return bookName;
+    private String isRead;
+
+    private int rating;
+
+    @NotBlank(message = "Description is required.")
+    @Size(max = 1000, message = "Description can be no more than 1000 characters.")
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private OurUsers user;
+
+    @Override
+    public String toString(){
+        return "Book{" +
+                "bookName='" + bookName + '\'' +
+                ", author='" + author + '\'' +
+                ", category='" + category + '\'' +
+                ", source='" + source + '\'' +
+                ", isRead=" + isRead + '\'' +
+                ", rating=" + rating +
+                ", description='" + description + '\'' +
+                '}';
     }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-
 }

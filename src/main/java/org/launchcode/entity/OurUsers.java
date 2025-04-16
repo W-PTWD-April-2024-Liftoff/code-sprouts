@@ -60,11 +60,11 @@ public class OurUsers implements UserDetails {
         return true;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_books",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private List<Book> bookList;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_books",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "book_id")
+//    )
+//    private List<Book> bookList;
 }

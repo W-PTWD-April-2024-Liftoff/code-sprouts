@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AddBook from "./Book/AddBook.jsx";
 import BookDetails from "./Book/BookDetails.jsx";
 import UpdateBook from "./Book/UpdateBook.jsx";
+import SearchBook from "./Book/SearchBook.jsx";
 //test
 // function App() {
 //   return (
@@ -61,11 +62,15 @@ function App() {
               path="/book/update/:id"
               element={<UpdateBook />}
             ></Route>
-            // <Route exact path="/" element={<LoginPage />} />
-            // <Route exact path="/login" element={<LoginPage />} />
-            // <Route path="/profile" element={<ProfilePage />} />
-            // <Route path="/register" element={<RegistrationPage />} />
-            //{" "}
+            <Route
+              exact
+              path="/book/search/:query"
+              element={<SearchBook />}
+            ></Route>
+            <Route exact path="/" element={<LoginPage />} />
+            <Route exact path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/register" element={<RegistrationPage />} />{" "}
             <Route
               path="/admin/user-management"
               element={<UserManagementPage />}
