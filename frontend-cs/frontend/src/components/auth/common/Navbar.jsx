@@ -70,7 +70,7 @@ function Navbar() {
         )}
         {isAuthenticated && (
           <li>
-            {/* <form className="d-flex" onSubmit={handleSearchSubmit}>
+            <form className="d-flex" onSubmit={handleSearchSubmit}>
               <input
                 className="form-control me-2"
                 type="search"
@@ -82,7 +82,7 @@ function Navbar() {
               <button className="btn btn-outline-success" type="submit">
                 Search
               </button>
-            </form> */}
+            </form>
           </li>
         )}
         {isAuthenticated && (

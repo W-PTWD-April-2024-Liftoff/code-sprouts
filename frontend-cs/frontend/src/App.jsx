@@ -42,6 +42,7 @@ import UserService from "./components/service/UserService";
 import UpdateUser from "./components/userspage/UpdateUser";
 import UserManagementPage from "./components/userspage/UserManagementPage";
 import ProfilePage from "./components/userspage/ProfilePage";
+import GoogleRedirectLoginPage from "./components/GoogleRedirectLoginPage";
 
 function App() {
   return (
@@ -62,13 +63,14 @@ function App() {
               path="/book/update/:id"
               element={<UpdateBook />}
             ></Route>
-            <Route
+            {/* <Route
               exact
               path="/book/search/:query"
               element={<SearchBook />}
-            ></Route>
+            ></Route> */}
             <Route exact path="/" element={<LoginPage />} />
             <Route exact path="/login" element={<LoginPage />} />
+            <Route path="/google-login" element={<GoogleRedirectLoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/register" element={<RegistrationPage />} />{" "}
             <Route

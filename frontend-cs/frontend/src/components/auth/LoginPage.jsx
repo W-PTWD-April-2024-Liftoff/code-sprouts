@@ -1,12 +1,23 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import UserService from "../service/UserService";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    const prefilledEmail = query.get("email");
+    if (prefilledEmail) {
+      setEmail(prefilledEmail);
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,6 +42,18 @@ function LoginPage() {
     }
   };
 
+  const handleGoogleLoginSuccess = (credentialResponse) => {
+    try {
+    const decoded = jwtDecode(credentialResponse.credential);
+    const googleEmail = decoded.email;
+    console.log("Google email:", googleEmail);
+    setEmail(googleEmail); // prefill email
+    } catch (err) {
+    console.error("Failed to decode Google token:", err);
+    setError("Google login failed");
+    }
+    };
+
   return (
     <div className="auth-container">
       <h2>Login</h2>
@@ -54,6 +77,7 @@ function LoginPage() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div style={{ marginTop: "1rem" }}> <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={() => setError("Google login failed")} /> </div>
     </div>
   );
 }
