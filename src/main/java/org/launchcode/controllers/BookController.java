@@ -1,16 +1,14 @@
 package org.launchcode.controllers;
 
 import org.launchcode.models.Book;
-//import org.launchcode.models.GoogleBooksResponse;
-//import org.launchcode.services.GoogleBookService;
+import org.launchcode.models.GoogleBooksResponse;
+import org.launchcode.services.GoogleBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.models.data.BookRepository;
 import org.launchcode.models.BookData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping
@@ -20,8 +18,8 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-//    @Autowired
-//    private GoogleBookService googleBookService;
+    @Autowired
+    private GoogleBookService googleBookService;
 
     @GetMapping("/book")
     public List<Book> getBooks() {
@@ -61,49 +59,64 @@ public class BookController {
         }
     }
 
-//    @GetMapping("/book/search")
-//    public List<Book> searchBooks(@RequestParam("bookName") String bookName) {
-//        List<Book> books = BookData.findBook(bookName, bookRepository.findAll());
-//        if (!books.isEmpty()) {
-//            books.forEach(book -> book.setSource("BookShelf"));
-//            return books;
+    @GetMapping("/book/search")
+    public List<Book> searchBooks(@RequestParam("bookName") String bookName) {
+        List<Book> books = BookData.findBook(bookName, bookRepository.findAll());
+        if (!books.isEmpty()) {
+            books.forEach(book -> book.setSource("BookShelf"));
+            return books;
+        }
+        else {
+            GoogleBooksResponse googleBookResponse = googleBookService.searchBooks(bookName);
+            if (googleBookResponse != null && googleBookResponse.getItems() != null && !googleBookResponse.getItems().isEmpty()) {
+                System.out.println("Google Books API Response: " + googleBookResponse);
+                List<Book> apiBooks = convertGoogleBooksToLocalBooks(googleBookResponse);
+                apiBooks.forEach(book -> book.setSource("The book you search is not available in bookshelf,similar search from internet"));
+                System.out.println("Books from Google: " + apiBooks.size());
+                //  return convertGoogleBooksToLocalBooks(googleBookResponse);
+                return apiBooks;
+            } else {
+                System.out.println("No books found from Google for the query: " + bookName);
+                return new ArrayList<>();
+            }
+        }
+    }
+
+    private List<Book> convertGoogleBooksToLocalBooks(GoogleBooksResponse googleBooksResponse) {
+        return googleBooksResponse.getItems().stream().map(item -> {
+            Book book = new Book();
+            book.setBookName(item.getVolumeInfo().getTitle());
+            book.setAuthor(item.getVolumeInfo().getAuthors() != null ?
+                    String.join(", ", item.getVolumeInfo().getAuthors()) : "Unknown Author");
+            book.setCategory(item.getVolumeInfo().getDescription());
+            return book;
+        }).toList();
+    }
+
+//    @RequestMapping(value = "books")
+//    public String filterBooks(@RequestParam String bookName, @RequestParam String category, @RequestParam int rating) {
+//        Iterable<Book> books;
+//        if (){
+//        } else {
 //        }
-//        else {
-//            GoogleBooksResponse googleBookResponse = googleBookService.searchBooks(bookName);
-//            if (googleBookResponse != null && googleBookResponse.getItems() != null && !googleBookResponse.getItems().isEmpty()) {
-//                System.out.println("Google Books API Response: " + googleBookResponse);
-//                List<Book> apiBooks = convertGoogleBooksToLocalBooks(googleBookResponse);
-//                apiBooks.forEach(book -> book.setSource("The book you search is not available in bookshelf,similar search from internet"));
-//                System.out.println("Books from Google: " + apiBooks.size());
-//                //  return convertGoogleBooksToLocalBooks(googleBookResponse);
-//                return apiBooks;
-//            } else {
-//                System.out.println("No books found from Google for the query: " + bookName);
-//                return new ArrayList<>();
-//            }
-//        }
-//    }
-//
-//    private List<Book> convertGoogleBooksToLocalBooks(GoogleBooksResponse googleBooksResponse) {
-//        return googleBooksResponse.getItems().stream().map(item -> {
-//            Book book = new Book();
-//            book.setBookName(item.getVolumeInfo().getTitle());
-//            book.setAuthor(item.getVolumeInfo().getAuthors() != null ?
-//                    String.join(", ", item.getVolumeInfo().getAuthors()) : "Unknown Author");
-//            book.setCategory(item.getVolumeInfo().getDescription());
-//            return book;
-//        }).toList();
+//        return ;
 //    }
 
-    @PutMapping("/book/search/AddFromApi")
-    private List<Book> addGoogleBooksFromApi (GoogleBooksResponse googleBooksResponse) {
-        return googleBooksReponse.getItems().stream.map(item -> {
-            Book addGoogleBook = new Book ();
-            addGoogleBook.setBookName(item.getVolumeInfo().getTitle());
-            addGoogleBook.setAuthor(item.getVolumeInfo().getAuthors());
-            addGoogleBook.setCategory(item.getVolumeInf().getDescription());
-            return bookRepository.save(addGoogleBook);
-        });
+//    @PostMapping("/book/search/AddFromApi")
+//    private List<Book> addGoogleBooksFromApi (GoogleBooksResponse googleBooksResponse) {
+//        return googleBooksResponse.getItems().stream().map(item -> {
+//            Book addGoogleBook = new Book ();
+//            addGoogleBook.setBookName(item.getVolumeInfo().getTitle());
+//            addGoogleBook.setAuthor(item.getVolumeInfo().getAuthors() != null ?
+//                    String.join(", ", item.getVolumeInfo().getAuthors()) : "Unknown Author");
+//            addGoogleBook.setCategory(item.getVolumeInfo().getDescription());
+//            return bookRepository.save(addGoogleBook);
+//        });
+//    }
+
+    @GetMapping("/book/filter")
+    public List<String> getCategories() {
+        return Arrays.asList("Category", "Rating");
     }
 
     @DeleteMapping("/book/delete/{bookidtodelete}")

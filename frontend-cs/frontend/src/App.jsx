@@ -9,6 +9,7 @@ import AddBook from './Book/AddBook.jsx';
 import BookDetails from './Book/BookDetails.jsx';
 import UpdateBook from './Book/UpdateBook.jsx';
 import SearchBook from './Book/SearchBook.jsx';
+import FilterBooks from './Book/FilterBooks.jsx';
 function App() {
  return (
            <main className="container mt-5">
@@ -20,6 +21,7 @@ function App() {
      <Route exact path="/book/viewById/:id" element={<BookDetails/>}></Route>
      <Route exact path="/book/update/:id" element={<UpdateBook/>}></Route>
      <Route exact path="/book/search/:query" element={ <SearchBook/> }></Route>
+     <Route exact path="/book/filter" element={<FilterBooks/>}></Route>
      </Routes>
             </Router>
       </main>

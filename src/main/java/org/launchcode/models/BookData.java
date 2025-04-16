@@ -14,4 +14,7 @@ public class BookData {
         }
         return booksFound;
     }
+
+    private String category;
+    private String rating;
 }

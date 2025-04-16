@@ -1,5 +1,6 @@
 package org.launchcode.models;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -29,8 +30,6 @@ public class Book extends AbstractEntity {
     public void setSource(String source) {
         this.source = source;
     }
-
-    private String source;
 
     public int getRating() {
         return rating;
@@ -66,14 +65,6 @@ public class Book extends AbstractEntity {
 
     public String getCategory() {
         return category;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
     }
 
     public void setCategory(String category) {
