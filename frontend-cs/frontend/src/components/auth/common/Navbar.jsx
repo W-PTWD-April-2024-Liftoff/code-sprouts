@@ -68,7 +68,7 @@ function Navbar() {
             <Link to="/book/add">Add Books</Link>
           </li>
         )}
-        {isAuthenticated && (
+        {/* {isAuthenticated && (
           <li>
             <form className="d-flex" onSubmit={handleSearchSubmit}>
               <input
@@ -84,7 +84,7 @@ function Navbar() {
               </button>
             </form>
           </li>
-        )}
+        )} */}
         {isAuthenticated && (
           <li>
             <Link to="/profile">Profile</Link>
