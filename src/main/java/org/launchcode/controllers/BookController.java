@@ -103,7 +103,7 @@ public class BookController {
             addGoogleBook.setAuthor(item.getVolumeInfo().getAuthors());
             addGoogleBook.setCategory(item.getVolumeInf().getDescription());
             return bookRepository.save(addGoogleBook);
-        })
+        });
     }
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
