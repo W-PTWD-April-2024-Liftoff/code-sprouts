@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+//this class handles all core user management operations such as
+//user registration, login, update, delete, fetch user data by email or id,
+//and all methods return ReqRes wrapper containing data, status code,
+
 @Service
 public class UsersManagementService {
 
@@ -31,18 +35,18 @@ public class UsersManagementService {
     public ReqRes register(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
 
-        try {
+        try { //create user object, set info from request
             OurUsers ourUser = new OurUsers();
             ourUser.setEmail(registrationRequest.getEmail());
             ourUser.setCity(registrationRequest.getCity());
             ourUser.setRole(registrationRequest.getRole());
             ourUser.setName(registrationRequest.getName());
-            ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+            ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword())); //encode password
             OurUsers ourUsersResult = usersRepo.save(ourUser);
-            if (ourUsersResult.getId()>0) {
+            if (ourUsersResult.getId()>0) { //validates ID
                 resp.setOurUsers((ourUsersResult));
                 resp.setMessage("User Saved Successfully");
-                resp.setStatusCode(200);
+                resp.setStatusCode(200); //sets status code for response
             }
 
         } catch (Exception e) {
@@ -57,10 +61,10 @@ public class UsersManagementService {
         ReqRes response = new ReqRes();
         try {
             authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
-                    loginRequest.getPassword()));
-        var user = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow();
-        var jwt = jwtUtils.generateToken(user);
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), //checks email
+                    loginRequest.getPassword())); //checks password
+        var user = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow();  //checks user
+        var jwt = jwtUtils.generateToken(user); //checks user through token
         var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
         response.setStatusCode(200);
         response.setToken(jwt);
@@ -101,7 +105,9 @@ public class UsersManagementService {
             response.setMessage(e.getMessage());
             return response;
         }
-
+//A refresh token is used to obtain new access and refresh token pairs when the current access token expires.
+// //When a client acquires an access token to access a protected resource, the client also receives a refresh token.
+// //Refresh tokens are also used to acquire extra access tokens for other resources.
     }
 
     public ReqRes getAllUsers() {

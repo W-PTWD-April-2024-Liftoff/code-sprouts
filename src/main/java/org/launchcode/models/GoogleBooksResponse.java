@@ -1,7 +1,7 @@
 package org.launchcode.models;
 
 import java.util.List;
-
+//used in controller
 public class GoogleBooksResponse {
     private List<Item> items;
 

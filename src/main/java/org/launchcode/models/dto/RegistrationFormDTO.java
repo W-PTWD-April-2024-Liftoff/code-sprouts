@@ -3,7 +3,7 @@ package org.launchcode.models.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
+//fields required for registration form
 public class RegistrationFormDTO extends org.launchcode.models.dto.LoginFormDTO {
     //inherits fields from loginformdto so this is the third field
     @NotNull(message = "Password is required.")

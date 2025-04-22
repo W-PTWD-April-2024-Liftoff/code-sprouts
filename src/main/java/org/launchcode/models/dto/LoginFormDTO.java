@@ -3,7 +3,7 @@ package org.launchcode.models.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
+//fields required for login form
 public class LoginFormDTO {
     //these variables will bind to the input fields in the form
     //notnull serve as form validation

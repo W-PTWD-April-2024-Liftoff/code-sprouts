@@ -27,7 +27,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     private OurUserDetailService ourUserDetailService;
-
+//catches all requests to the backend
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
@@ -38,18 +38,18 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
-        jwtToken = authHeader.substring(7);
-        userEmail = jwtUtils.extractUsername(jwtToken);
+        jwtToken = authHeader.substring(7);// method extracts jwts token from header
+        userEmail = jwtUtils.extractUsername(jwtToken); //vaildates token with jwtUtils class where username is
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = ourUserDetailService.loadUserByUsername(userEmail);
+            UserDetails userDetails = ourUserDetailService.loadUserByUsername(userEmail); //loads user details
 
             if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
-                token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                securityContext.setAuthentication(token);
+                token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); //sets the auth details in security context
+                securityContext.setAuthentication(token); //sets token, who is logged in, session
                 SecurityContextHolder.setContext(securityContext);
 
             }

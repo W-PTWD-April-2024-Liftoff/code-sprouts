@@ -6,7 +6,7 @@ import lombok.Data;
 import org.launchcode.entity.OurUsers;
 
 import java.util.List;
-
+//sets the fields for ReqRes class for registering and loggin in, passed in for user to be logged in or register
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,5 +28,5 @@ public class ReqRes {
 
     public int getStatusCode() {
         return statusCode;
-    }
+    } //for response success 200, bad route 400, 403 unauth, 500 server
 }

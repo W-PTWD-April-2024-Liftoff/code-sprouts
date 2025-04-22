@@ -29,6 +29,7 @@ public class BookController {
     @Autowired
     private UsersRepo ourUsersRepository;
 
+    //retrieves list of books based on the associated user by email
     @GetMapping("/book")
     public List<Book> getBooks() {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -80,20 +81,26 @@ public class BookController {
             return null;
         }
     }
-
+//need front end to work
     @GetMapping("/book/search")
     public List<Book> searchBooks(@RequestParam("bookName") String bookName) {
-        List<Book> books = BookData.findBook(bookName, bookRepository.findAll());
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        List<Book> books = BookData.findBook(bookName, bookRepository.findBookByUserId(user.getId()));
         if (!books.isEmpty()) {
             books.forEach(book -> book.setSource("BookShelf"));
             return books;
         }
-        else {
+        else { //searches the GoogleBooks API to search for term
             GoogleBooksResponse googleBookResponse = googleBookService.searchBooks(bookName);
             if (googleBookResponse != null && googleBookResponse.getItems() != null && !googleBookResponse.getItems().isEmpty()) {
                 System.out.println("Google Books API Response: " + googleBookResponse);
                 List<Book> apiBooks = convertGoogleBooksToLocalBooks(googleBookResponse);
-                apiBooks.forEach(book -> book.setSource("The book you search is not available in bookshelf,similar search from internet"));
+                apiBooks.forEach(book -> book.setSource("The book you searched is not available in your bookshelf. Here are similar results from GoogleBooks"));
                 System.out.println("Books from Google: " + apiBooks.size());
 // return convertGoogleBooksToLocalBooks(googleBookResponse);
                 return apiBooks;
@@ -103,7 +110,7 @@ public class BookController {
             }
         }
     }
-
+//needs converts book into local book to save in database by setting the fields with appropriate info
     private List<Book> convertGoogleBooksToLocalBooks(GoogleBooksResponse googleBooksResponse) {
         return googleBooksResponse.getItems().stream().map(item -> {
             Book book = new Book();

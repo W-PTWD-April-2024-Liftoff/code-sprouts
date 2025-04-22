@@ -9,14 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-//test
+//data for users
 @Entity
 @Table(name = "ourusers")
 @Data
 public class OurUsers implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //hibernate template for id generation
     private Integer id;
     private String email;
     private String name;
@@ -29,6 +29,7 @@ public class OurUsers implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
+    //retrieves roles the user has admin or user
 
     @Override
     public String getPassword() {
@@ -60,11 +61,5 @@ public class OurUsers implements UserDetails {
         return true;
     }
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_books",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "book_id")
-//    )
-//    private List<Book> bookList;
+
 }

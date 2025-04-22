@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.launchcode.entity.OurUsers;
 
+// declares book class
 @Getter
 @Setter
 @Entity
@@ -31,11 +32,13 @@ public class Book extends AbstractEntity {
     @Size(max = 1000, message = "Description can be no more than 1000 characters.")
     private String description;
 
+    //Many books to one user relationship
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private OurUsers user;
 
+    //prints string representation of class to be sent to, used by front end or other locations (postman or console)
     @Override
     public String toString(){
         return "Book{" +

@@ -1,7 +1,7 @@
 import axios from "axios";
-
+//sends request to backend carries token if needed for each method
 class UserService {
-  static BASE_URL = "http://localhost:8080";
+  static BASE_URL = "http://localhost:8080"; //backend
 
   static async login(email, password) {
     try {
@@ -18,11 +18,11 @@ class UserService {
     try {
       const response = await axios.post(
         `${UserService.BASE_URL}/auth/register`,
-        userData
+        userData  //following lines can be uncommented to create admin only ability to register new users
         // {
         //   headers: { Authorization: `Bearer ${token}` },
         // }
-      );
+      );//no token need allows anyone to register
       return response.data;
     } catch (err) {
       throw err;

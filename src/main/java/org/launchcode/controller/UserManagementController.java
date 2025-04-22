@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+//routes are set for actions taken at each path same as router in react
 @RestController
 public class UserManagementController {
 

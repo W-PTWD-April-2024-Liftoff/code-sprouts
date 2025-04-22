@@ -15,7 +15,7 @@ function UpdateUser() {
 
   useEffect(() => {
     fetchUserDataById(userId); // Pass the userId to fetchUserDataById
-  }, [userId]); //wheen ever there is a chane in userId, run this
+  }, [userId]); //when ever there is a change in userId, run this
 
   const fetchUserDataById = async (userId) => {
     try {

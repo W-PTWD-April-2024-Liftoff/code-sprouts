@@ -15,10 +15,5 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 );
 
-
-// createRoot(document.getElementById('root')).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
-
+// wraps app with Google OAuth context provides tnecessary configuration so any component 
+// can initiate Google login flows and access the user’s Google data (if authorized)
