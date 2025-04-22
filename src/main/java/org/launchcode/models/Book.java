@@ -26,6 +26,8 @@ public class Book extends AbstractEntity {
 
     private String isRead;
 
+    //private boolean isRead;
+
     private int rating;
 
     @NotBlank(message = "Description is required.")

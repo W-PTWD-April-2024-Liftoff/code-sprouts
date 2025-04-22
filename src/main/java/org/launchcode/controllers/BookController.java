@@ -12,6 +12,7 @@ import org.launchcode.models.data.BookRepository;
 import org.launchcode.models.BookData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,17 @@ public class BookController {
         OurUsers user = optionalUser.get();
         return (List<Book>) bookRepository.findBookByUserId(user.getId());
     }
+
+//    @GetMapping("/book/read")
+//    public List<Book> getBooks() {
+//        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+//        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+//        if (optionalUser.isEmpty()) {
+//            throw new RuntimeException("Authenticated user not found");
+//        }
+//        OurUsers user = optionalUser.get();
+//        return (List<Book>) bookRepository.findBookByUserId(user.getId());
+//    }
 
 
     @PostMapping("/book/add")
@@ -81,6 +93,23 @@ public class BookController {
             return null;
         }
     }
+
+//    @PutMapping("/book/markread/{id}")
+//    public Book updatedBook(@PathVariable int id, @RequestBody Book newBook) {
+//        Optional<Book> oldbook = bookRepository.findById(id);
+//        if (oldbook.isPresent()) {
+//            Book bookToUpdate = oldbook.get();
+//            bookToUpdate.setBookName(newBook.getBookName());
+//            bookToUpdate.setCategory(newBook.getCategory());
+//            bookToUpdate.setAuthor(newBook.getAuthor());
+//            bookToUpdate.setDescription(newBook.getDescription());
+//            bookToUpdate.setRating(newBook.getRating());
+//            bookToUpdate.setIsRead(newBook.getIsRead());
+//            return bookRepository.save(bookToUpdate);
+//        } else {
+//            return null;
+//        }
+//    }
 //need front end to work
     @GetMapping("/book/search")
     public List<Book> searchBooks(@RequestParam("bookName") String bookName) {
@@ -122,6 +151,16 @@ public class BookController {
         }).toList();
     }
 
+    @GetMapping("/book/filter")
+    public List<String> getCategories() {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        return Arrays.asList("Category", "Rating");
+    }
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {

@@ -65,7 +65,12 @@ const [searchQuery, setSearchQuery] = useState("");
 
         {isAuthenticated && (
           <li>
-            <Link to="/book">Bookshelf All Books</Link>
+            <Link to="/book">All Books</Link>
+          </li>
+        )}
+        {isAuthenticated && (
+          <li>
+            <Link to="/book/read">Read Books</Link>
           </li>
         )}
         {isAuthenticated && (
@@ -83,9 +88,14 @@ const [searchQuery, setSearchQuery] = useState("");
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          <button className="btn btn-outline-success" type="submit">Search Books</button>
+          <button className="btn btn-outline-success" type="submit">Search</button>
         </form>
         </li>
+        {isAuthenticated && (
+          <li>
+            <Link to="/book/filter">Filter</Link>
+          </li>
+        )}
         {isAuthenticated && (
           <li>
             <Link to="/profile">Profile</Link>
@@ -93,7 +103,7 @@ const [searchQuery, setSearchQuery] = useState("");
         )}
         {adminOnly && (
           <li>
-            <Link to="/admin/user-management">User Management</Link>
+            <Link to="/admin/user-management">User Admin</Link>
           </li>
         )}
         {isAuthenticated && (
