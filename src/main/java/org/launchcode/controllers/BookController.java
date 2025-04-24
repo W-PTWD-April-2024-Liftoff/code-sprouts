@@ -50,7 +50,7 @@ public class BookController {
 //            throw new RuntimeException("Authenticated user not found");
 //        }
 //        OurUsers user = optionalUser.get();
-//        return (List<Book>) bookRepository.findBookByUserId(user.getId());
+//        return (List<Book>) bookRepository.findBookByUserId(user.getId()); //make this say if book.isRead==true
 //    }
 
 
@@ -87,30 +87,39 @@ public class BookController {
             bookToUpdate.setAuthor(newBook.getAuthor());
             bookToUpdate.setDescription(newBook.getDescription());
             bookToUpdate.setRating(newBook.getRating());
-            bookToUpdate.setIsRead(newBook.getIsRead());
+            bookToUpdate.setRead(newBook.isRead());
             return bookRepository.save(bookToUpdate);
         } else {
             return null;
         }
     }
 
-//    @PutMapping("/book/markread/{id}")
-//    public Book updatedBook(@PathVariable int id, @RequestBody Book newBook) {
-//        Optional<Book> oldbook = bookRepository.findById(id);
-//        if (oldbook.isPresent()) {
-//            Book bookToUpdate = oldbook.get();
-//            bookToUpdate.setBookName(newBook.getBookName());
-//            bookToUpdate.setCategory(newBook.getCategory());
-//            bookToUpdate.setAuthor(newBook.getAuthor());
-//            bookToUpdate.setDescription(newBook.getDescription());
-//            bookToUpdate.setRating(newBook.getRating());
-//            bookToUpdate.setIsRead(newBook.getIsRead());
-//            return bookRepository.save(bookToUpdate);
-//        } else {
-//            return null;
-//        }
-//    }
-//need front end to work
+    @PutMapping("/book/markasread/{id}")
+    public Book markasread(@PathVariable int id) {
+        Optional<Book> oldbook = bookRepository.findById(id);
+        if (oldbook.isPresent()) {
+            Book bookToUpdate = oldbook.get();
+            bookToUpdate.setRead(true);
+            return bookRepository.save(bookToUpdate);
+        } else {
+            return null;
+        }
+    }
+
+    @PutMapping("/book/markasunread/{id}")
+    public Book markasunread(@PathVariable int id) {
+        Optional<Book> oldbook = bookRepository.findById(id);
+        if (oldbook.isPresent()) {
+            Book bookToUpdate = oldbook.get();
+            bookToUpdate.setRead(false);
+            return bookRepository.save(bookToUpdate);
+        } else {
+            return null;
+        }
+    }
+
+
+    //need front end to work
     @GetMapping("/book/search")
     public List<Book> searchBooks(@RequestParam("bookName") String bookName) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -162,6 +171,10 @@ public class BookController {
         OurUsers user = optionalUser.get();
         if (category != null && rating != null) {
             return bookRepository.findByUserIdAndCategoryAndRating(user.getId(), category, rating);
+//        } else if (rating != null && read != null) {
+//            return bookRepository.findByRatingAndRead(rating, read);
+//        } else if (read != null) {
+//            return bookRepository.findByRead(read);
         } else if (category != null) {
             return bookRepository.findByUserIdAndCategory(user.getId(), category);
         } else if (rating != null) {
@@ -180,6 +193,7 @@ public class BookController {
         OurUsers user = optionalUser.get();
         return bookRepository.findCategoryByUserId(user.getId());
     }
+
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {

@@ -1,0 +1,23 @@
+/* Navbar.css */
+.navbar-custom {
+    background-color: #333; /* or any dark color */
+    padding: 10px;
+  }
+  
+  .navbar-links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .navbar-links li a {
+    color: white !important;   /* Makes links white */
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .navbar-links li a:hover {
+    color: #ccc; /* optional hover color */
+  }
+  

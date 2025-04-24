@@ -9,7 +9,7 @@ const AddBook = () => {
     author: "",
     description: "",
     rating: "",
-    isRead: "",
+    isRead: false,
   });
   const { bookName, category, author, description, rating, isRead } = book;
   const navigate = useNavigate();
@@ -122,7 +122,7 @@ const AddBook = () => {
           />
         </div>
 
-        <div className="input-group mb-5">
+        {/* <div className="input-group mb-5">
           <label className="input-group-text" htmlFor="isRead">
             Is Read? Enter yes
           </label>
@@ -135,7 +135,7 @@ const AddBook = () => {
             value={isRead}
             onChange={handleInputChange}
           />
-        </div>
+        </div> */}
 
         <div className="row">
           <div className="col-sm-2">

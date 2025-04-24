@@ -27,7 +27,12 @@ function ProfilePage() {
       <p>City: {profileInfo.city}</p>
       {profileInfo.role === "ADMIN" && (
         <button>
-          <Link to={`/update-user/${profileInfo.id}`}>Update This Profile</Link>
+          <Link
+    to={`/update-user/${profileInfo.id}`}
+    style={{ color: "white", textDecoration: "none" }}
+  >
+    Update This Profile
+  </Link>
         </button>
       )}
     </div>

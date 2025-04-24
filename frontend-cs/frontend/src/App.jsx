@@ -19,7 +19,7 @@ import UserManagementPage from "./components/userspage/UserManagementPage";
 import ProfilePage from "./components/userspage/ProfilePage";
 import GoogleRedirectLoginPage from "./components/GoogleRedirectLoginPage";
 import FilterBooks from './Book/FilterBooks.jsx';
-
+import Read from './Book/Read.jsx';
 
 function App() {
   return (
@@ -47,6 +47,7 @@ function App() {
             ></Route>}
             <Route exact path="/book/filter" element={<FilterBooks/>}></Route>
             <Route exact path="/" element={<LoginPage />} />
+            <Route exact path="/book/read" element={<Read />} />
             <Route exact path="/login" element={<LoginPage />} />
             <Route path="/google-login" element={<GoogleRedirectLoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />

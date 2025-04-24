@@ -24,9 +24,9 @@ public class Book extends AbstractEntity {
 
     private String source;
 
-    private String isRead;
+    //private String isRead;
 
-    //private boolean isRead;
+    private boolean isRead;
 
     private int rating;
 
