@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -8,6 +9,19 @@ const SearchResults = () => {
   const source = books.length > 0 ?
 books[0].source || "The book you are searching is not available in the BookShelf,here is the similar results from internet": "No Book is Found";
 
+const handleSave = async (book) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post(
+      "http://localhost:8080/book/saveFromGoogleBooks",
+      book,{ headers: { Authorization: `Bearer ${token}` },});
+    console.log("Book saved successfully:", response.data);
+    alert("Book saved successfully!");
+  } catch (error) {
+    console.error("Error saving book:", error);
+    alert("Could not save book.");
+  }
+};
   return (
     <div>
       <h2>Search Results</h2>
@@ -21,6 +35,7 @@ books[0].source || "The book you are searching is not available in the BookShelf
               <b>Title: </b>{book.bookName} 
               <b>   Author: </b>{book.author}
               <b>   Category: </b>{book.category}<Link to="/book">View in BookShelf</Link>
+              <button className="btn btn-outline-primary ms-3" onClick={() => handleSave(book)}>Save to BookShelf</button>
             </li>
           ))} 
         </ol>

@@ -194,6 +194,20 @@ public class BookController {
         return bookRepository.findCategoryByUserId(user.getId());
     }
 
+    @PostMapping("/book/saveFromGoogleBooks")
+    public Book saveFromGoogleBooks(@RequestBody Book book) {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+
+        book.setUser(user);
+
+        return bookRepository.save(book);
+    }
+
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {

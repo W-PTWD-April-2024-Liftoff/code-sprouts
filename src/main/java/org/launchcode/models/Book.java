@@ -30,7 +30,6 @@ public class Book extends AbstractEntity {
 
     private int rating;
 
-    @NotBlank(message = "Description is required.")
     @Size(max = 1000, message = "Description can be no more than 1000 characters.")
     private String description;
 
