@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function BookView() {
   const [books, setBooks] = useState([]);
@@ -33,9 +34,33 @@ function BookView() {
     loadBooks();
   };
 
+  const handleMarkAsRead = async (id) => {
+    const token = localStorage.getItem("token");
+    await axios.put(`http://localhost:8080/book/markasread/${id}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    alert("Book Marked as Read");
+    
+    loadBooks();
+
+  };
+
+  const handleToggleReadStatus = async (id, currentStatus) => {
+    const token = localStorage.getItem("token");
+    const endpoint = currentStatus
+      ? `http://localhost:8080/book/markasunread/${id}`
+      : `http://localhost:8080/book/markasread/${id}`;
+    await axios.put(endpoint, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    loadBooks(); // Refresh book list
+  };
+  
+
   return (
+    
     <section>
-      <div className="table-responsive">
+      <div className="table-responsive"><h3 text align="center">All Books</h3>
         <table className="table table-bordered table-hover">
           <thead>
             <tr className="text-center">
@@ -60,25 +85,47 @@ function BookView() {
                 <td>{book.author}</td>
                 <td>{book.description}</td>
                 <td>{book.rating}</td>
-                <td>{book.isRead}</td>
+                <td>{(book.read === true)? "Yes" : "No"}</td>
                 <td className="d-flex justify-content-center">
-                  <td>
+                <label className="form-check form-switch" style={{ marginTop: "8px", marginLeft: "8px" }}>
+  <input
+    className="form-check-input"
+    type="checkbox"
+    role="switch"
+    checked={book.read}
+    onChange={() => handleToggleReadStatus(book.id, book.read)}
+    style={{
+      backgroundColor: book.read ? "#f8d7da" : "#f8d7da", 
+      borderColor: "#f5c6cb",
+      cursor: "pointer",
+    }}
+  />
+  <span style={{
+    marginLeft: "5px",
+    marginRight: "10px",
+    color: book.read ? "#6c757d" : "#721c24",
+    fontWeight: "bold"
+  }}>
+    {book.read ? "Unread" : "Read"}
+  </span>
+</label>
+
                     <Link
                       to={`/book/viewById/${book.id}`}
-                      className="btn btn-primary mt-2"
+                      className="btn btn-primary mt-2 me-1 ms-3"
                     >
                       View
                     </Link>
-                  </td>
-                  <td>
+                  
+                  
                     <Link
                       to={`/book/update/${book.id}`}
-                      className="btn btn-success mt-2"
+                      className="btn btn-success mt-2 me-1"
                     >
                       {" "}
                       Update
                     </Link>
-                  </td>
+           
                   <button
                     className="btn btn-danger mt-2"
                     onClick={() => handleDelete(book.id)}

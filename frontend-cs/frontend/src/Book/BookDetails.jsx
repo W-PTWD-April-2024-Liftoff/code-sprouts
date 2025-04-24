@@ -66,7 +66,10 @@ function BookDetails() {
             </div>
 
             <Link className="btn btn-primary my-2" to="/book">
-              Back to Bookshelf
+              Back to All Books
+            </Link>
+            <Link className="btn btn-primary my-2" to="/book/read">
+              Back to Read Stats
             </Link>
           </div>
         </div>

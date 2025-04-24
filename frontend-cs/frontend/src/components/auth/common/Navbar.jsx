@@ -1,7 +1,5 @@
-//import React from "react";
-//import { Link } from "react-router-dom";
+import "../../../Navbar.css"; 
 import UserService from "../../service/UserService";
-//import SearchResults from "../../../Book/SearchBook";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -54,8 +52,8 @@ const [searchQuery, setSearchQuery] = useState("");
   };
 
   return (
-    <nav>
-      <ul>
+    <nav className="navbar-custom">
+  <ul className="navbar-links">
         <li>
           <Link to="/login">Login</Link>
         </li>
@@ -70,7 +68,7 @@ const [searchQuery, setSearchQuery] = useState("");
         )}
         {isAuthenticated && (
           <li>
-            <Link to="/book/read">Read Books</Link>
+            <Link to="/book/read">Read Stats</Link>
           </li>
         )}
         {isAuthenticated && (

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserService from "../service/UserService";
 
+
 function UserManagementPage() {
   const [users, setUsers] = useState([]);
 
@@ -45,7 +46,9 @@ function UserManagementPage() {
       <h2>Users Management Page</h2>
       <button className="reg-button">
         {" "}
-        <Link to="/register">Add User</Link>
+        <Link to="/register" style={{ color: "white", textDecoration: "none" }}>
+  Add User
+</Link>
       </button>
       <table>
         <thead>
@@ -70,7 +73,10 @@ function UserManagementPage() {
                   Delete
                 </button>
                 <button>
-                  <Link to={`/update-user/${user.id}`}>Update</Link>
+                  
+<Link to={`/update-user/${user.id}`} style={{ color: "white", textDecoration: "none" }}>
+  Update
+</Link>
                 </button>
               </td>
             </tr>
