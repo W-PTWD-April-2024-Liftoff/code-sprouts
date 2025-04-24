@@ -22,7 +22,7 @@ useEffect(() => {
   if (filters.category !== 'All') params.category = filters.category;
   if (filters.rating !== '') params.rating = filters.rating;
   
-  axios.get("http://localhost:8080/book", {params, headers: { Authorization: `Bearer ${token}`}})
+  axios.get("http://localhost:8080/book/filter", {params, headers: { Authorization: `Bearer ${token}`}})
       .then(response => setBooks(response.data))
       .catch(error => console.error("Error fetching books:", error));
 }, [filters]);
@@ -68,48 +68,49 @@ return (
                 </tr>
               </thead>
               <tbody className="text-center">
-                {books.map((book, index) => (
-                  <tr key={book.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{book.bookName}</td>
-                    <td>{book.category}</td>
-                    <td>{book.author}</td>
-                    <td>{book.description}</td>
-                    <td>{book.rating}</td>
-                    <td>{book.isRead}</td>
-                    <td className="d-flex justify-content-center">
-                      <td>
-                        <Link
-                          to={`/book/viewById/${book.id}`}
-                          className="btn btn-primary mt-2"
-                        >
-                          View
-                        </Link>
-                      </td>
-                      <td>
-                        <Link
-                          to={`/book/update/${book.id}`}
-                          className="btn btn-success mt-2"
-                        >
-                          {" "}
-                          Update
-                        </Link>
-                      </td>
-                      <button
-                        className="btn btn-danger mt-2"
-                        onClick={() => handleDelete(book.id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-       <p> No books found that match the filter</p>
+              {books.length > 0 ? (
+        books.map((book, index) => (
+          <tr key={book.id}>
+            <th scope="row">{index + 1}</th>
+            <td>{book.bookName}</td>
+            <td>{book.category}</td>
+            <td>{book.author}</td>
+            <td>{book.description}</td>
+            <td>{book.rating}</td>
+            <td>{book.isRead ? "Yes" : "No"}</td>
+            <td className="d-flex justify-content-center">
+              <Link
+                to={`/book/viewById/${book.id}`}
+                className="btn btn-primary mt-2"
+              >
+                View
+              </Link>
+              <Link
+                to={`/book/update/${book.id}`}
+                className="btn btn-success mt-2"
+              >
+                Update
+              </Link>
+              <button
+                className="btn btn-danger mt-2"
+                onClick={() => handleDelete(book.id)}
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colSpan="8" className="text-center">
+            <p>No books found that match the filter</p>
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
     </div>
 );
   };
   
   export default FilterBooks;
-

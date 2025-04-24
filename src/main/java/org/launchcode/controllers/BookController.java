@@ -151,7 +151,7 @@ public class BookController {
         }).toList();
     }
 
-    @GetMapping("/book")
+    @GetMapping("/book/filter")
     public List<Book> getFilteredBooks(@RequestParam(required = false) String category,
                                        @RequestParam(required = false) Integer rating) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -173,6 +173,17 @@ public class BookController {
         }
         return bookRepository.findBookByUserId(user.getId());
     };
+
+    @GetMapping("/book/categories")
+    public List<String> getCategories() {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        return bookRepository.findCategoryByUserId(user.getId());
+    }
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {
