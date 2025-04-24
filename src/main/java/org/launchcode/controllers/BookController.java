@@ -162,10 +162,6 @@ public class BookController {
         OurUsers user = optionalUser.get();
         if (category != null && rating != null) {
             return bookRepository.findByUserIdAndCategoryAndRating(user.getId(), category, rating);
-//        } else if (rating != null && read != null) {
-//            return bookRepository.findByRatingAndRead(rating, read);
-//        } else if (read != null) {
-//            return bookRepository.findByRead(read);
         } else if (category != null) {
             return bookRepository.findByUserIdAndCategory(user.getId(), category);
         } else if (rating != null) {
