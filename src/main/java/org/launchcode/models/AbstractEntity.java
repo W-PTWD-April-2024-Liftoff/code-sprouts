@@ -6,6 +6,7 @@ import jakarta.persistence.MappedSuperclass;
 
 import java.util.Objects;
 
+//extends id into book class to provide common functionality here an ID
 @MappedSuperclass
 public abstract class AbstractEntity {
 

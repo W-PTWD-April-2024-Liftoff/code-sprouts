@@ -1,14 +1,18 @@
 package org.launchcode.controllers;
 
+import org.launchcode.entity.OurUsers;
 import org.launchcode.models.Book;
 import org.launchcode.models.GoogleBooksResponse;
+import org.launchcode.repository.UsersRepo;
 import org.launchcode.services.GoogleBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.models.data.BookRepository;
 import org.launchcode.models.BookData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,16 +27,44 @@ public class BookController {
     @Autowired
     private GoogleBookService googleBookService;
 
+    @Autowired
+    private UsersRepo ourUsersRepository;
+
+    //retrieves list of books based on the associated user by email
     @GetMapping("/book")
     public List<Book> getBooks() {
-        return (List<Book>) bookRepository.findAll();
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        return (List<Book>) bookRepository.findBookByUserId(user.getId());
     }
+
+//    @GetMapping("/book/read")
+//    public List<Book> getBooks() {
+//        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+//        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+//        if (optionalUser.isEmpty()) {
+//            throw new RuntimeException("Authenticated user not found");
+//        }
+//        OurUsers user = optionalUser.get();
+//        return (List<Book>) bookRepository.findBookByUserId(user.getId());
+//    }
+
 
     @PostMapping("/book/add")
     public Book addBook(@RequestBody Book book) {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        book.setUser(user);
         return bookRepository.save(book);
     }
-
 
     @GetMapping("/book/viewById/{id}")
     public Book viewBookById(@PathVariable int id) {
@@ -41,7 +73,7 @@ public class BookController {
             Book book = (Book) optBook.get();
             return book;
         } else {
-            throw new RuntimeException("Book is not available to view");
+            return null;
         }
     }
 
@@ -53,27 +85,53 @@ public class BookController {
             bookToUpdate.setBookName(newBook.getBookName());
             bookToUpdate.setCategory(newBook.getCategory());
             bookToUpdate.setAuthor(newBook.getAuthor());
+            bookToUpdate.setDescription(newBook.getDescription());
+            bookToUpdate.setRating(newBook.getRating());
+            bookToUpdate.setIsRead(newBook.getIsRead());
             return bookRepository.save(bookToUpdate);
         } else {
-             throw new RuntimeException("Book is not Available to update");
+            return null;
         }
     }
 
+//    @PutMapping("/book/markread/{id}")
+//    public Book updatedBook(@PathVariable int id, @RequestBody Book newBook) {
+//        Optional<Book> oldbook = bookRepository.findById(id);
+//        if (oldbook.isPresent()) {
+//            Book bookToUpdate = oldbook.get();
+//            bookToUpdate.setBookName(newBook.getBookName());
+//            bookToUpdate.setCategory(newBook.getCategory());
+//            bookToUpdate.setAuthor(newBook.getAuthor());
+//            bookToUpdate.setDescription(newBook.getDescription());
+//            bookToUpdate.setRating(newBook.getRating());
+//            bookToUpdate.setIsRead(newBook.getIsRead());
+//            return bookRepository.save(bookToUpdate);
+//        } else {
+//            return null;
+//        }
+//    }
+//need front end to work
     @GetMapping("/book/search")
     public List<Book> searchBooks(@RequestParam("bookName") String bookName) {
-        List<Book> books = BookData.findBook(bookName, bookRepository.findAll());
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        List<Book> books = BookData.findBook(bookName, bookRepository.findBookByUserId(user.getId()));
         if (!books.isEmpty()) {
             books.forEach(book -> book.setSource("BookShelf"));
             return books;
         }
-        else {
+        else { //searches the GoogleBooks API to search for term
             GoogleBooksResponse googleBookResponse = googleBookService.searchBooks(bookName);
             if (googleBookResponse != null && googleBookResponse.getItems() != null && !googleBookResponse.getItems().isEmpty()) {
                 System.out.println("Google Books API Response: " + googleBookResponse);
                 List<Book> apiBooks = convertGoogleBooksToLocalBooks(googleBookResponse);
-                apiBooks.forEach(book -> book.setSource("The book you search is not available in bookshelf,similar search from internet"));
+                apiBooks.forEach(book -> book.setSource("The book you searched is not available in your bookshelf. Here are similar results from GoogleBooks"));
                 System.out.println("Books from Google: " + apiBooks.size());
-                //  return convertGoogleBooksToLocalBooks(googleBookResponse);
+// return convertGoogleBooksToLocalBooks(googleBookResponse);
                 return apiBooks;
             } else {
                 System.out.println("No books found from Google for the query: " + bookName);
@@ -81,7 +139,7 @@ public class BookController {
             }
         }
     }
-
+//needs converts book into local book to save in database by setting the fields with appropriate info
     private List<Book> convertGoogleBooksToLocalBooks(GoogleBooksResponse googleBooksResponse) {
         return googleBooksResponse.getItems().stream().map(item -> {
             Book book = new Book();
@@ -93,6 +151,28 @@ public class BookController {
         }).toList();
     }
 
+    @GetMapping("/book")
+    public List<Book> getFilteredBooks(@RequestParam(required = false) String category,
+                                       @RequestParam(required = false) Integer rating) {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        if (category != null && rating != null) {
+            return bookRepository.findByUserIdAndCategoryAndRating(user.getId(), category, rating);
+//        } else if (rating != null && read != null) {
+//            return bookRepository.findByRatingAndRead(rating, read);
+//        } else if (read != null) {
+//            return bookRepository.findByRead(read);
+        } else if (category != null) {
+            return bookRepository.findByUserIdAndCategory(user.getId(), category);
+        } else if (rating != null) {
+            return bookRepository.findByUserIdAndRating(user.getId(), rating);
+        }
+        return bookRepository.findBookByUserId(user.getId());
+    };
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {
@@ -100,8 +180,7 @@ public class BookController {
         if (booktobedeleted.isPresent()) {
             bookRepository.deleteById(bookidtodelete);
         }
-        throw new RuntimeException("Book is not Available to delete");
+        return null;
     }
-
- }
-
+//
+}

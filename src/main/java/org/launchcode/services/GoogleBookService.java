@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.SQLOutput;
 
+//uses api key referenced from app properties to access google books for search
 @Service
 public class GoogleBookService {
     private final RestTemplate restTemplate;

@@ -1,0 +1,15 @@
+package org.launchcode;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication
+//@ComponentScan(basePackages = "org.launchcode")
+public class BookShelfApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BookShelfApplication.class, args);
+    }
+
+}
