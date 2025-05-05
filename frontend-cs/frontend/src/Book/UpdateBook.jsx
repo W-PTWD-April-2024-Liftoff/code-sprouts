@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { FaStar } from "react-icons/fa";
 
 const UpdateBook = () => {
   const [book, setBook] = useState({
@@ -9,14 +10,15 @@ const UpdateBook = () => {
     category: "",
     author: "",
     description: "",
-    rating: "",
+    rating: "1",
     isRead: false,
   });
   const { bookName, category, author, description, rating, isRead } = book;
   const navigate = useNavigate();
   const { id } = useParams();
   const handleInputChange = (e) => {
-    setBook({ ...book, [e.target.name]: e.target.value });
+    const {name, value, type, checked} = e.target;
+    setBook({ ...book, [name]: type === "checkbox" ? checked : value});
   };
   const updateBook = async (e) => {
     e.preventDefault();
@@ -35,8 +37,8 @@ const UpdateBook = () => {
         category: "",
         author: "",
         description: "",
-        rating: "",
-        isRead: "",
+        rating: "1",
+        isRead: "false",
       });
       navigate("/book");
     } catch (error) {
@@ -44,7 +46,7 @@ const UpdateBook = () => {
         "Error saving the book:",
         error.response ? error.response.data : error.message
       );
-      alert("Error savaing the book");
+      alert("Error saving the book");
     }
   };
   useEffect(() => {
@@ -57,6 +59,16 @@ const UpdateBook = () => {
     });
     setBook(response.data);
   };
+
+  const ratingOptions = [];
+  for (let i = 1; i <= 5; i++) {
+    const stars = "★".repeat(i) + "☆".repeat(5 - i);
+    ratingOptions.push(
+      <option key={i} value={i}>
+        {stars} ({i})
+      </option>
+    );
+  }
 
   return (
     <div className="col-sm-8 py-2 px-5">
@@ -87,7 +99,7 @@ const UpdateBook = () => {
             id="category"
             required
             value={category}
-            onChange={(e) => handleInputChange(e)}
+            onChange={handleInputChange}
           ></input>
         </div>
         <div className="input-group mb-5">
@@ -117,35 +129,23 @@ const UpdateBook = () => {
               onChange={handleInputChange}
             ></input>
           </div>
-
           <div className="input-group mb-5">
             <label className="input-group-text" htmlFor="rating">
               Rating
             </label>
-            <input
+            <select
               className="form-control-sm-6"
-              type="text"
+              type="number"
               name="rating"
               id="rating"
               required
               value={rating}
-              onChange={(e) => handleInputChange(e)}
-            ></input>
-          </div>
-          {/* <div className="input-group mb-5">
-            <label className="input-group-text" htmlFor="isRead">
-              Is Read?
-            </label>
-            <input
-              className="form-control-sm-6"
-              type="text"
-              name="isRead"
-              id="isRead"
-              required
-              value={isRead}
-              onChange={(e) => handleInputChange(e)}
-            ></input>
-          </div> */}
+              onChange={handleInputChange}
+            >
+              <option value=""> Select A Rating</option>
+              {ratingOptions}
+            </select>
+          </div> 
         </div>
         <div className="row">
           <div className="col-sm-2">

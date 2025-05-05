@@ -311,3 +311,8 @@ button:hover {
 .profile-page-container button:hover {
   background-color: #093c72;
 }
+
+.span {
+  color: gold;
+  font-size: 1.2em;
+}

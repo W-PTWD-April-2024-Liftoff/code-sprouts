@@ -29,28 +29,7 @@ public class GoogleBooksResponse {
         private String title;
         private List<String> authors;
         private String description;
-        private String category;
-
-
-        public String getGenre() {
-            return genre;
-        }
-
-        public void setGenre(String genre) {
-            this.genre = genre;
-        }
-
-        private String genre;
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
-
-
+        private List<String> categories;
 
         // Getters and setters
 
@@ -78,6 +57,13 @@ public class GoogleBooksResponse {
             this.description = description;
         }
 
+        public List<String> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(List<String> categories) {
+            this.categories = categories;
+        }
 
     }
 }

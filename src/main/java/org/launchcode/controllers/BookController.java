@@ -12,7 +12,6 @@ import org.launchcode.models.data.BookRepository;
 import org.launchcode.models.BookData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,7 +85,6 @@ public class BookController {
             bookToUpdate.setCategory(newBook.getCategory());
             bookToUpdate.setAuthor(newBook.getAuthor());
             bookToUpdate.setDescription(newBook.getDescription());
-            bookToUpdate.setRating(newBook.getRating());
             bookToUpdate.setRead(newBook.isRead());
             return bookRepository.save(bookToUpdate);
         } else {
@@ -155,7 +153,10 @@ public class BookController {
             book.setBookName(item.getVolumeInfo().getTitle());
             book.setAuthor(item.getVolumeInfo().getAuthors() != null ?
                     String.join(", ", item.getVolumeInfo().getAuthors()) : "Unknown Author");
-            book.setCategory(item.getVolumeInfo().getDescription());
+            book.setCategory(item.getVolumeInfo().getCategories() != null ?
+                    String.join(", ", item.getVolumeInfo().getCategories()) : "Unknown Category");
+            book.setDescription(item.getVolumeInfo().getDescription() != null ?
+                    item.getVolumeInfo().getDescription() : "Unknown Description");
             return book;
         }).toList();
     }
@@ -194,6 +195,29 @@ public class BookController {
         return bookRepository.findCategoryByUserId(user.getId());
     }
 
+    @PostMapping("/book/{bookId}/rate")
+    public String rateBook(@PathVariable int bookId, @RequestParam int rating) {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+
+        if (rating < 1 || rating > 5) {
+            return "Rating must be between 1 - 5";
+        }
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+
+        if(!book.isRead()) {
+            return "Must mark book as read to rate";
+        }
+        book.setRating(rating);
+        bookRepository.save(book);
+
+        return "Rating saved successfully";
+    }
+
     @PostMapping("/book/saveFromGoogleBooks")
     public Book saveFromGoogleBooks(@RequestBody Book book) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -202,11 +226,16 @@ public class BookController {
             throw new RuntimeException("Authenticated user not found");
         }
         OurUsers user = optionalUser.get();
-
         book.setUser(user);
+
+        if (book.getBookName() == null) book.setBookName("Unknown Book");
+        if (book.getAuthor() == null) book.setAuthor("Unknown Author");
+        if (book.getCategory() == null) book.setCategory("Unknown Category");
+        if (book.getDescription() == null) book.setDescription("");
 
         return bookRepository.save(book);
     }
+
 
 
     @DeleteMapping("/book/delete/{bookidtodelete}")

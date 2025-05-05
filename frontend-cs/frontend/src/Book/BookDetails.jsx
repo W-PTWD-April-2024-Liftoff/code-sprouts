@@ -55,7 +55,7 @@ function BookDetails() {
                   </li>
 
                   <li className="list-group-item">
-                    <b>Rating:</b> {book.rating}
+                    <b>Rating:</b> {book.rating} <span>&#9733;</span>
                   </li>
 
                   <li className="list-group-item">

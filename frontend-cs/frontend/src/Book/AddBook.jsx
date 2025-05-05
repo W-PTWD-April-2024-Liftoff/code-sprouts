@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaStar } from "react-icons/fa";
 
 const AddBook = () => {
   const [book, setBook] = useState({
@@ -8,7 +9,7 @@ const AddBook = () => {
     category: "",
     author: "",
     description: "",
-    rating: "",
+    rating: "1",
     isRead: false,
   });
   const { bookName, category, author, description, rating, isRead } = book;
@@ -42,6 +43,16 @@ const AddBook = () => {
       alert("Error saving the book");
     }
   };
+
+  const ratingOptions = [];
+  for (let i = 1; i <= 5; i++) {
+    const stars = "★".repeat(i) + "☆".repeat(5 - i);
+    ratingOptions.push(
+      <option key={i} value={i}>
+        {stars} ({i})
+      </option>
+    );
+  }
 
   return (
     <div className="col-sm-8 py-2 px-5">
@@ -111,31 +122,33 @@ const AddBook = () => {
           <label className="input-group-text" htmlFor="rating">
             Rating
           </label>
-          <input
+          <select
             className="form-control-sm-6"
-            type="text"
+            type="number"
             name="rating"
             id="rating"
             required
             value={rating}
             onChange={handleInputChange}
-          />
+            disabled={!isRead}
+          >
+            <option value=""> Select A Rating</option>
+            {ratingOptions}
+            </select>
         </div>
 
-        {/* <div className="input-group mb-5">
+        <div className="input-group mb-5">
           <label className="input-group-text" htmlFor="isRead">
-            Is Read? Enter yes
+            Mark as Read
           </label>
           <input
-            className="form-control-sm-6"
-            type="text"
-            name="isRead"
-            id="isRead"
-            required
-            value={isRead}
-            onChange={handleInputChange}
+          type="checkbox"
+          name="isRead"
+          id="isRead"
+          checked={isRead}
+          onChange={handleInputChange}
           />
-        </div> */}
+        </div>
 
         <div className="row">
           <div className="col-sm-2">

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import SaveFromApi from "./SaveFromApi";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -9,18 +10,12 @@ const SearchResults = () => {
   const source = books.length > 0 ?
 books[0].source || "The book you are searching is not available in the BookShelf,here is the similar results from internet": "No Book is Found";
 
-const handleSave = async (book) => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.post(
-      "http://localhost:8080/book/saveFromGoogleBooks",
-      book,{ headers: { Authorization: `Bearer ${token}` },});
-    console.log("Book saved successfully:", response.data);
-    alert("Book saved successfully!");
-  } catch (error) {
-    console.error("Error saving book:", error);
-    alert("Could not save book.");
-  }
+const [selectedBook, setSelectedBook] = useState(null)
+const [showModal, setShowModal] = useState(false)
+
+const handleSave = (book) => {
+  setSelectedBook(book);
+  setShowModal(true);
 };
   return (
     <div>
@@ -33,8 +28,10 @@ const handleSave = async (book) => {
           {books.map((book, index) => (
             <li key={book.id || index}>
               <b>Title: </b>{book.bookName} 
-              <b>   Author: </b>{book.author}
-              <b>   Category: </b>{book.category}<Link to="/book">View in BookShelf</Link>
+              <b>Author: </b>{book.author}
+              <b>Category: </b>{book.category}
+              <b>Description: </b>{book.description}
+              <Link to="/book">View in BookShelf</Link>
               <button className="btn btn-outline-primary ms-3" onClick={() => handleSave(book)}>Save to BookShelf</button>
             </li>
           ))} 
@@ -42,36 +39,14 @@ const handleSave = async (book) => {
       ) : (
         <p>No books found</p>
       )}
+      <SaveFromApi
+      show={showModal}
+      onHide={() => setShowModal(false)}
+      bookData={selectedBook}
+      />
     </div>
   );
 };
 
 export default SearchResults;
 
-
-
-
-
-//to be continued formatting
- {/* <table align="center" border="1">
-        <tr>
-          <th>Title:</th>
-          <th>Author:</th>
-          <th>Category:</th>
-          <th>View in BookShelf</th>
-        </tr>
-      {books.length > 0 ? (
-        <tr>
-          {books.map((book, index) => (
-            <td key={book.id || index}
-            <td>{book.author}</td>
-            <td> key={book.id || index}{book.category}</td>
-            <td><Link to="/book">View in BookShelf</Link></td><tr></tr>
-          ))}
-      ) : (
-        <p>No books found</p>
-      )}
-      </table>
-    </div>
-  );
-}; */}

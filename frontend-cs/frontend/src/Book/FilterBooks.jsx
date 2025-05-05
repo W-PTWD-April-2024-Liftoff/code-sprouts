@@ -42,7 +42,7 @@ return (
     onChange={(e) => setFilters({...filters, rating: e.target.value})} >
       <option value="">Any</option>
       {[1,2,3,4,5].map((ratings)=> (
-        <option key={ratings} value={ratings}>{ratings}</option>
+        <option key={ratings} value={ratings}>{ratings} &#9733; </option>
       ))}
     </select>
     {/* <label>Read: </label>
@@ -76,7 +76,7 @@ return (
             <td>{book.category}</td>
             <td>{book.author}</td>
             <td>{book.description}</td>
-            <td>{book.rating}</td>
+            <td>{book.rating} &#9733; </td>
             <td>{book.isRead ? "Yes" : "No"}</td>
             <td className="d-flex justify-content-center">
               <Link
