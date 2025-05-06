@@ -16,8 +16,6 @@ const UpdateBook = () => {
     isRead: false,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
-
   const { bookName, category, author, description, rating, notes, customTag, isRead } = book;
   const navigate = useNavigate();
   const { id } = useParams();
@@ -74,10 +72,8 @@ const UpdateBook = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
     setBook(response.data);
-    setIsLoading(false);
   } catch (error) {
     console.error("Error loading book:", error);
-    setIsLoading(false);
   }
 }
 
