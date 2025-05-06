@@ -20,6 +20,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface BookRepository extends CrudRepository<Book,Integer> {
@@ -39,5 +40,7 @@ public interface BookRepository extends CrudRepository<Book,Integer> {
 
     @Query("SELECT DISTINCT b.customTag FROM Book b WHERE b.user.id = :userId")
     List<String> findCustomTagsByUserId(@Param("userId")Integer userId);
+
+    List<Book> findBooksByCategoryInOrAuthorIn(Set<String> categories, Set<String> authors);
 
 }

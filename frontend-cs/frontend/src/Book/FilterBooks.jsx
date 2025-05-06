@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router";
+import { FaStar, FaRegStar} from "react-icons/fa";
 
 function FilterBooks() {
 const [books, setBooks] = useState([]);
@@ -38,6 +39,20 @@ useEffect(() => {
       .then(response => setBooks(response.data))
       .catch(error => console.error("Error fetching books:", error));
 }, [filters]);
+
+const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        i <= rating ? (
+          <FaStar key={i} color="#ffc107"/>
+        ) : (
+          <FaRegStar key={i} color="#e4e5e9"/>
+        )
+      );
+    }
+    return stars;
+  }
 
 return (
   <div>
@@ -90,7 +105,7 @@ return (
             <td>{book.category}</td>
             <td>{book.author}</td>
             <td>{book.description}</td>
-            <td>{book.rating} &#9733; </td>
+            <td>{renderStars(book.rating)}</td>
             <td>{book.notes}</td>
             <td>{book.customTag}</td>
             <td>{book.isRead ? "Yes" : "No"}</td>

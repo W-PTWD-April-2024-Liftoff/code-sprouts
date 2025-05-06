@@ -14,6 +14,8 @@ import org.launchcode.models.BookData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping
@@ -191,6 +193,19 @@ public class BookController {
         }).toList();
     }
 
+    @GetMapping("/book/search/googleBookRecommendations")
+    public List<Book> getGoogleRecommendations(@RequestParam("bookName") String bookName) {
+        GoogleBooksResponse googleBookResponse = googleBookService.searchBooks(bookName);
+        if (googleBookResponse != null && googleBookResponse.getItems() != null && !googleBookResponse.getItems().isEmpty()) {
+            List<Book> apiBooks = convertGoogleBooksToLocalBooks(googleBookResponse);
+            apiBooks.forEach(book -> book.setSource("GoogleBooks"));
+            return apiBooks;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+
     @GetMapping("/book/filter")
     public List<Book> getFilteredBooks(@RequestParam(required = false) String category,
                                        @RequestParam(required = false) Integer rating,
@@ -282,8 +297,6 @@ public class BookController {
 
         return bookRepository.save(book);
     }
-
-
 
     @DeleteMapping("/book/delete/{bookidtodelete}")
     public Book deleteBookById(@PathVariable int bookidtodelete) {

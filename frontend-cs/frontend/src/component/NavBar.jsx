@@ -25,10 +25,10 @@ const NavBar = () => {
         if (response.data.length === 0) {
           alert("No books found for your search.");
         }
-        navigate(`/book/search/${searchQuery}`, { state: { books: response.data } });
+        navigate(`/book/search/${searchQuery}`, { state: { books: response.data, searchTerm: searchQuery } });
       } catch (error) {
 
-        navigate(`/book/search/${searchQuery}`, { state: { books: [] } });
+        navigate(`/book/search/${searchQuery}`, { state: { books: []} });
       }
     }
   };
