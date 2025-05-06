@@ -31,4 +31,13 @@ public interface BookRepository extends CrudRepository<Book,Integer> {
 
     @Query("SELECT DISTINCT b.category FROM Book b WHERE b.user.id = :userId")
     List<String> findCategoryByUserId(@Param("userId")Integer userId);
+
+    List<Book> findByUserIdAndCustomTag(Integer userId, String customTag);
+    List<Book> findByUserIdAndRatingAndCustomTag(Integer userId, int rating, String customTag);
+    List<Book> findByUserIdAndCategoryAndCustomTag(Integer userId, String category, String customTag);
+    List<Book> findByUserIdAndCategoryAndRatingAndCustomTag(Integer userId, String category, int rating, String customTag);
+
+    @Query("SELECT DISTINCT b.customTag FROM Book b WHERE b.user.id = :userId")
+    List<String> findCustomTagsByUserId(@Param("userId")Integer userId);
+
 }

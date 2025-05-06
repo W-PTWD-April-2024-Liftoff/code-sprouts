@@ -5,9 +5,11 @@ import { Link } from "react-router";
 function FilterBooks() {
 const [books, setBooks] = useState([]);
 const [categories, setCategories] = useState(['All']);
+const [customTags, setCustomTags] = useState(['All']);
 const [filters, setFilters] = useState({
   category: 'All',
   rating: '',
+  customTag: 'All'
 })
 
 useEffect(() => {
@@ -16,11 +18,21 @@ useEffect(() => {
   .then(response => setCategories(['All', ...response.data]))
   .catch(error => console.error('Error loading categories:', error))
 }, []);
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  axios.get('http://localhost:8080/book/customTags', 
+    {headers: {Authorization: `Bearer ${token}`}})
+    .then(response => setCustomTags(['All', ...response.data]))
+    .catch(error => console.error('Error loading Custom Tags: ', error));
+}, []);
+
 useEffect(() => {
   const params = {};
   const token = localStorage.getItem("token");
   if (filters.category !== 'All') params.category = filters.category;
   if (filters.rating !== '') params.rating = filters.rating;
+  if (filters.customTag !== 'All') params.customTag = filters.customTag;
   
   axios.get("http://localhost:8080/book/filter", {params, headers: { Authorization: `Bearer ${token}`}})
       .then(response => setBooks(response.data))
@@ -45,13 +57,13 @@ return (
         <option key={ratings} value={ratings}>{ratings} &#9733; </option>
       ))}
     </select>
-    {/* <label>Read: </label>
-    <select value={filters.read}
-    onChange={(e)=> setFilters({...filters, read: e.target.value})} >
-      <option value="">Any</option>
-      <option value="true">Read</option>
-      <option value="false">Unread</option>
-    </select> */}
+    <label>Custom Tag</label>
+    <select value = {filters.customTag}
+    onChange={(e) => setFilters({...filters, customTag: e.target.value})}>
+      {customTags.map((customTag) => (
+        <option key={customTag} value={customTag}>{customTag}</option>
+      ))}
+    </select>
     <table className="table table-bordered table-hover">
               <thead>
                 <tr className="text-center">
@@ -61,6 +73,8 @@ return (
                   <th scope="col">Author</th>
                   <th scope="col">Description</th>
                   <th scope="col">Rating</th>
+                  <th scope="col">Notes</th>
+                  <th scope="col">Custom Tag</th>
                   <th scope="col">Is Read?</th>
                   <th scope="col" colSpan={3}>
                     Actions
@@ -77,6 +91,8 @@ return (
             <td>{book.author}</td>
             <td>{book.description}</td>
             <td>{book.rating} &#9733; </td>
+            <td>{book.notes}</td>
+            <td>{book.customTag}</td>
             <td>{book.isRead ? "Yes" : "No"}</td>
             <td className="d-flex justify-content-center">
               <Link

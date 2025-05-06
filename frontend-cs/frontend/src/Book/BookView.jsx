@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router";
 import { useNavigate } from "react-router-dom";
-import Rating from "react-rating-stars-component";
 import { FaStar, FaRegStar} from "react-icons/fa";
 
 function BookView() {
@@ -103,6 +102,8 @@ function BookView() {
               <th scope="col">Author</th>
               <th scope="col">Description</th>
               <th scope="col">Rating</th>
+              <th scope="col">Notes</th>
+              <th scope="col">Custom Tag</th>
               <th scope="col">Is Read?</th>
               <th scope="col" colSpan={3}>
                 Actions
@@ -118,6 +119,8 @@ function BookView() {
                 <td>{book.author}</td>
                 <td>{book.description}</td>
                 <td>{renderStars(book.rating)}</td>
+                <td>{book.notes}</td>
+                <td>{book.customTag}</td>
                 <td>{(book.read === true)? "Yes" : "No"}</td>
                 <td className="d-flex justify-content-center">
                 <label className="form-check form-switch" style={{ marginTop: "8px", marginLeft: "8px" }}>

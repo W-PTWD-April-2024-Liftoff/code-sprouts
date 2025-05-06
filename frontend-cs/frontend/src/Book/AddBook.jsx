@@ -10,9 +10,11 @@ const AddBook = () => {
     author: "",
     description: "",
     rating: "1",
+    notes: "",
+    customTag: "",
     isRead: false,
   });
-  const { bookName, category, author, description, rating, isRead } = book;
+  const { bookName, category, author, description, rating, notes, customTag, isRead } = book;
   const navigate = useNavigate();
 
   // Handle input changes for each field
@@ -135,6 +137,36 @@ const AddBook = () => {
             <option value=""> Select A Rating</option>
             {ratingOptions}
             </select>
+        </div>
+
+        <div className="input-group mb-5">
+          <label className="input-group-text" htmlFor="notes">
+            Notes
+          </label>
+          <input
+            className="form-control-sm-6"
+            type="text"
+            name="notes"
+            id="notes"
+            required
+            value={notes}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="input-group mb-5">
+          <label className="input-group-text" htmlFor="customTag">
+            Custom Tag
+          </label>
+          <input
+            className="form-control-sm-6"
+            type="text"
+            name="customTag"
+            id="customTag"
+            required
+            value={customTag}
+            onChange={handleInputChange}
+          />
         </div>
 
         <div className="input-group mb-5">

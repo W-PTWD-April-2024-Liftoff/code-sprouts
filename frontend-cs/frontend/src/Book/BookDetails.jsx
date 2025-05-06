@@ -59,6 +59,14 @@ function BookDetails() {
                   </li>
 
                   <li className="list-group-item">
+                    <b>Notes:</b> {book.notes}
+                  </li>
+
+                  <li className="list-group-item">
+                    <b>Custom Tag:</b> {book.customTag}
+                  </li>
+
+                  <li className="list-group-item">
                     <b>Is Read?:</b> {book.isRead}
                   </li>
                 </ul>

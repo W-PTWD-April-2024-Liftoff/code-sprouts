@@ -78,13 +78,36 @@ public class BookController {
 
     @PutMapping("/book/update/{id}")
     public Book updatedBook(@PathVariable int id, @RequestBody Book newBook) {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
         Optional<Book> oldbook = bookRepository.findById(id);
         if (oldbook.isPresent()) {
             Book bookToUpdate = oldbook.get();
-            bookToUpdate.setBookName(newBook.getBookName());
-            bookToUpdate.setCategory(newBook.getCategory());
-            bookToUpdate.setAuthor(newBook.getAuthor());
-            bookToUpdate.setDescription(newBook.getDescription());
+            if (newBook.getBookName() != null && !newBook.getBookName().isEmpty()) {
+                bookToUpdate.setBookName(newBook.getBookName());
+            }
+            if (newBook.getCategory() != null && !newBook.getCategory().isEmpty()) {
+                bookToUpdate.setCategory(newBook.getCategory());
+            }
+            if (newBook.getAuthor() != null && !newBook.getAuthor().isEmpty()) {
+                bookToUpdate.setAuthor(newBook.getAuthor());
+            }
+            if (newBook.getDescription() != null && !newBook.getDescription().isEmpty()) {
+                bookToUpdate.setDescription(newBook.getDescription());
+            }
+            if(newBook.getRating() > 0) {
+                bookToUpdate.setRating(newBook.getRating());
+            }
+            if(newBook.getNotes() != null && !newBook.getNotes().isEmpty()) {
+                bookToUpdate.setNotes(newBook.getNotes());
+            }
+            if(newBook.getCustomTag() != null && !newBook.getCustomTag().isEmpty()) {
+                bookToUpdate.setCustomTag(newBook.getCustomTag());
+            }
             bookToUpdate.setRead(newBook.isRead());
             return bookRepository.save(bookToUpdate);
         } else {
@@ -157,13 +180,21 @@ public class BookController {
                     String.join(", ", item.getVolumeInfo().getCategories()) : "Unknown Category");
             book.setDescription(item.getVolumeInfo().getDescription() != null ?
                     item.getVolumeInfo().getDescription() : "Unknown Description");
+
+            String description = book.getDescription();
+            if (description.length() > 1000) {
+               description = description.substring(0, 1000) + "...";
+                }
+                book.setDescription(description);
+
             return book;
         }).toList();
     }
 
     @GetMapping("/book/filter")
     public List<Book> getFilteredBooks(@RequestParam(required = false) String category,
-                                       @RequestParam(required = false) Integer rating) {
+                                       @RequestParam(required = false) Integer rating,
+                                       @RequestParam(required = false) String customTag) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
         if (optionalUser.isEmpty()) {
@@ -172,14 +203,18 @@ public class BookController {
         OurUsers user = optionalUser.get();
         if (category != null && rating != null) {
             return bookRepository.findByUserIdAndCategoryAndRating(user.getId(), category, rating);
-//        } else if (rating != null && read != null) {
-//            return bookRepository.findByRatingAndRead(rating, read);
-//        } else if (read != null) {
-//            return bookRepository.findByRead(read);
         } else if (category != null) {
             return bookRepository.findByUserIdAndCategory(user.getId(), category);
         } else if (rating != null) {
             return bookRepository.findByUserIdAndRating(user.getId(), rating);
+        } else if (customTag != null) {
+            return bookRepository.findByUserIdAndCustomTag(user.getId(), customTag);
+        } else if (customTag != null && rating != null) {
+            return bookRepository.findByUserIdAndRatingAndCustomTag(user.getId(), rating, customTag);
+        } else if (customTag != null && category != null) {
+            return bookRepository.findByUserIdAndCategoryAndCustomTag(user.getId(), category, customTag);
+        } else if (customTag != null && rating != null && category != null) {
+            return bookRepository.findByUserIdAndCategoryAndRatingAndCustomTag(user.getId(), customTag, rating, category);
         }
         return bookRepository.findBookByUserId(user.getId());
     };
@@ -195,6 +230,16 @@ public class BookController {
         return bookRepository.findCategoryByUserId(user.getId());
     }
 
+    @GetMapping("/book/customTags")
+    public List<String> getCustomTags() {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<OurUsers> optionalUser = ourUsersRepository.findByEmail(currentUserEmail);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("Authenticated user not found");
+        }
+        OurUsers user = optionalUser.get();
+        return bookRepository.findCustomTagsByUserId(user.getId());
+    }
     @PostMapping("/book/{bookId}/rate")
     public String rateBook(@PathVariable int bookId, @RequestParam int rating) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -232,6 +277,8 @@ public class BookController {
         if (book.getAuthor() == null) book.setAuthor("Unknown Author");
         if (book.getCategory() == null) book.setCategory("Unknown Category");
         if (book.getDescription() == null) book.setDescription("");
+        if (book.getNotes() == null) book.setNotes("");
+        if (book.getCustomTag() == null) book.setCustomTag("");
 
         return bookRepository.save(book);
     }

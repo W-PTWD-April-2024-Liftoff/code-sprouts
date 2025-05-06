@@ -11,11 +11,17 @@ const UpdateBook = () => {
     author: "",
     description: "",
     rating: "1",
+    notes: "",
+    customTag: "",
     isRead: false,
   });
-  const { bookName, category, author, description, rating, isRead } = book;
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { bookName, category, author, description, rating, notes, customTag, isRead } = book;
   const navigate = useNavigate();
   const { id } = useParams();
+
   const handleInputChange = (e) => {
     const {name, value, type, checked} = e.target;
     setBook({ ...book, [name]: type === "checkbox" ? checked : value});
@@ -24,9 +30,14 @@ const UpdateBook = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
+
+      const updatedBook = {};
+      for (let key in book) {
+        if (book[key] !== "") updatedBook[key] = book[key];
+      }
       const response = await axios.put(
         `http://localhost:8080/book/update/${id}`,
-        book,
+        updatedBook,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -38,6 +49,8 @@ const UpdateBook = () => {
         author: "",
         description: "",
         rating: "1",
+        notes: "",
+        customTag: "",
         isRead: "false",
       });
       navigate("/book");
@@ -49,16 +62,24 @@ const UpdateBook = () => {
       alert("Error saving the book");
     }
   };
+
   useEffect(() => {
     loadBook();
   }, [id]);
+
   const loadBook = async () => {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(`http://localhost:8080/book/${id}`, book, {
+    try {
+      const token = localStorage.getItem("token");
+    const response = await axios.get(`http://localhost:8080/book/viewById/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setBook(response.data);
-  };
+    setIsLoading(false);
+  } catch (error) {
+    console.error("Error loading book:", error);
+    setIsLoading(false);
+  }
+}
 
   const ratingOptions = [];
   for (let i = 1; i <= 5; i++) {
@@ -146,6 +167,34 @@ const UpdateBook = () => {
               {ratingOptions}
             </select>
           </div> 
+          <div className="input-group mb-5">
+            <label className="input-group-text" htmlFor="notes">
+              Notes
+            </label>
+            <input
+              className="form-control-sm-6"
+              type="text"
+              name="notes"
+              id="notes"
+              required
+              value={notes}
+              onChange={handleInputChange}
+            ></input>
+          </div>
+          <div className="input-group mb-5">
+            <label className="input-group-text" htmlFor="customTag">
+              Custom Tag
+            </label>
+            <input
+              className="form-control-sm-6"
+              type="text"
+              name="customTag"
+              id="customTag"
+              required
+              value={customTag}
+              onChange={handleInputChange}
+            ></input>
+          </div>
         </div>
         <div className="row">
           <div className="col-sm-2">

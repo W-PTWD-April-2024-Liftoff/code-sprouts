@@ -27,7 +27,6 @@ public class Book extends AbstractEntity {
 
     private boolean isRead;
 
-    @Size(max = 1000, message = "Description can be no more than 1000 characters.")
     private String description;
 
     //Many books to one user relationship
@@ -35,6 +34,10 @@ public class Book extends AbstractEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private OurUsers user;
+
+    private String notes;
+
+    private String customTag;
 
     //prints string representation of class to be sent to, used by front end or other locations (postman or console)
     @Override
@@ -47,6 +50,8 @@ public class Book extends AbstractEntity {
                 ", isRead=" + isRead + '\'' +
                 ", rating=" + rating + '\'' +
                 ", description='" + description + '\'' +
+                ", notes='" + notes + '\'' +
+                ", customTag='" + customTag + '\'' +
                 '}';
     }
 }
